@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'tsc'],
   env: {
     browser: true,
     es2021: true,
@@ -20,9 +20,17 @@ module.exports = {
   },
   rules: {
     // solve problem with public folder
+    'tsc/config': ['error', {
+      configFile: 'tsconfig.json'
+    }],
     'import/no-unresolved': [2,
       { ignore: ['public'] },
     ],
+    'max-len': ['warn', {
+      code: 120,
+      ignoreStrings: true,
+      ignoreUrls: true,
+    }],
     'react/prop-types': 'off',
     'react/jsx-key': 'off',
     'react/require-default-props': 'off',
