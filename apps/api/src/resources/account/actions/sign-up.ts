@@ -2,11 +2,11 @@ import { z } from 'zod';
 
 import config from 'config';
 import { securityUtil } from 'utils';
-import { analyticsService, emailService } from 'services';
 import { validateMiddleware } from 'middlewares';
 import { AppKoaContext, Next, AppRouter, Template } from 'types';
 import { userService, User } from 'resources/user';
 
+import emailService from 'services/email/email.service';
 import { emailRegex, passwordRegex } from 'resources/account/account.constants';
 
 const schema = z.object({
@@ -53,11 +53,6 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     passwordHash: hash.toString(),
     isEmailVerified: false,
     signupToken,
-  });
-
-  analyticsService.track('New user created', {
-    firstName,
-    lastName,
   });
 
   await emailService.sendTemplate<Template.VERIFY_EMAIL>({

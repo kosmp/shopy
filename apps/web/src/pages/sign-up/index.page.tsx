@@ -85,7 +85,6 @@ const SignUp: NextPage = () => {
   const onSubmit = (data: SignUpParams) => signUp(data, {
     onSuccess: (response: any) => {
       if (response.signupToken) setSignupToken(response.signupToken);
-
       setRegistered(true);
       setEmail(data.email);
     },
