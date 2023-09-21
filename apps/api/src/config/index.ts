@@ -17,7 +17,6 @@ const schema = z.object({
   WEB_URL: z.string(),
   SENDGRID_API_KEY: z.string().optional(),
   ADMIN_KEY: z.string().optional(),
-  MIXPANEL_API_KEY: z.string().optional(),
   CLOUD_STORAGE_ENDPOINT: z.string().optional(),
   CLOUD_STORAGE_BUCKET: z.string().optional(),
   CLOUD_STORAGE_ACCESS_KEY_ID: z.string().optional(),
