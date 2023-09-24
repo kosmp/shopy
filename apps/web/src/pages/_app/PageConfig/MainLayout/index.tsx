@@ -12,12 +12,12 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => (
   <AppShell
     header={<Header />}
     footer={<Footer />}
-    styles={(theme) => ({
+    styles={() => ({
       root: {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: theme.colors.gray[0],
+        backgroundColor: 'var(--Black-50, #FCFCFC)',
       },
       main: {
         padding: '32px',

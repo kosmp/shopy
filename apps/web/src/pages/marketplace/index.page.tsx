@@ -47,7 +47,7 @@ const Marketplace: NextPage = () => {
 
     useEffect(() => {
 
-    }, [selectedOption])
+    }, [selectedOption]);
 
     return (
         <>

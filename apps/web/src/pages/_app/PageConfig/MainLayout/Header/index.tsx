@@ -1,19 +1,24 @@
-import { memo, FC } from 'react';
+import {memo, FC, useState} from 'react';
 import { RoutePath } from 'routes';
 import {
   Header as LayoutHeader,
   Container,
+  Text,
 } from '@mantine/core';
 import { Link } from 'components';
 import { LogoImage } from 'public/images';
-
 import { accountApi } from 'resources/account';
+import { useStyles } from './styles';
+import MarketplaceMainTabs from './components/MarketplaceMainTabs';
 
-import UserMenu from './components/UserMenu';
+// import UserMenu from './components/UserMenu';
 import ShadowLoginBanner from './components/ShadowLoginBanner';
+import CartAndLogout from './components/CartAndLogout';
 
 const Header: FC = () => {
+  const { classes } = useStyles();
   const { data: account } = accountApi.useGet();
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   if (!account) return null;
 
@@ -21,22 +26,16 @@ const Header: FC = () => {
     <LayoutHeader height="72px">
       {account.isShadow && <ShadowLoginBanner email={account.email} />}
       <Container
-        sx={(theme) => ({
-          minHeight: '72px',
-          padding: '0 32px',
-          display: 'flex',
-          flex: '1 1 auto',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: theme.white,
-          borderBottom: `1px solid ${theme.colors.gray[4]}`,
-        })}
+        className={classes.headerContainer}
         fluid
       >
-        <Link type="router" href={RoutePath.Home}>
+        <Link underline={false} type="router" href={RoutePath.Home}>
           <LogoImage />
+          <Text className={classes.logoText}>Shopy</Text>
         </Link>
-        <UserMenu />
+        <MarketplaceMainTabs />
+        <CartAndLogout cartItemCount={cartItemCount} />
+        {/* <UserMenu /> */}
       </Container>
     </LayoutHeader>
   );
