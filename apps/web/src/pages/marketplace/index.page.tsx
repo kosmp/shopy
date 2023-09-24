@@ -12,6 +12,7 @@ import {
     NativeSelect,
     Group,
 } from '@mantine/core';
+import {useStyles} from "./styles";
 
 import {IconArrowsDownUp, IconChevronDown} from '@tabler/icons-react'
 import {Search} from 'public/images';
@@ -33,6 +34,7 @@ const products : Product[] = [
 
 
 const Marketplace: NextPage = () => {
+    const {classes} = useStyles();
     const [numberOfResults, setNumberOfResults] = useState(0);
     const [selectedOption, setSelectedOption] = useState('Sort by newest');
     const [inputFilterValueFrom, setInputFilterValueFrom] = useState<number | ''>('');
@@ -69,35 +71,28 @@ const Marketplace: NextPage = () => {
                             radius="8px"
                         />
                         <Stack>
-                            <Flex style={{justifyContent: "space-between"}}>
+                            <Flex className={ classes.activeFiltersAndResults }>
                                 <Text>{numberOfResults} Results</Text>
                                 <Group>
                                     <Button
+                                        className={ classes.switchButton }
                                         onClick={handleSwitchClick}
-                                        style={{
-                                            background: 'none',
-                                            border: 'none',
-                                            padding: 0,
-                                            cursor: 'pointer',
-                                            width: '16px',
-                                            height: '16px'
-                                        }}
                                     >
                                         <IconArrowsDownUp size={"16px"} color={"gray"} />
                                     </Button>
                                     <NativeSelect
+                                        className={ classes.selectSort }
                                         data={['Sort by newest', 'Sort by oldest']}
                                         value={selectedOption}
                                         onChange={(event) => setSelectedOption(event.target.value)}
                                         variant="unstyled"
                                         rightSection={<IconChevronDown/>}
                                         rightSectionWidth={20}
-                                        style={{ width: "118px" }}
                                     />
                                 </Group>
                             </Flex>
                             <Space/>
-                            <Group style={{ display: 'inline-flex'}}>
+                            <Group className={ classes.activeFilterPillsGroup }>
                                 <ActiveFilterPill
                                     inputValueFrom={inputFilterValueFrom}
                                     inputValueTo={inputFilterValueTo}
