@@ -1,4 +1,3 @@
-import '../styles/globals.css';
 import classnames from 'classnames';
 import { Inter } from 'next/font/google';
 

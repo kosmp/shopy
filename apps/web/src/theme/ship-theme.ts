@@ -1,7 +1,7 @@
 import { MantineTheme, MantineThemeOverride } from '@mantine/core';
 
 const shipTheme: MantineThemeOverride = {
-  fontFamily: 'Roboto, sans-serif',
+  fontFamily: 'Inter',
   fontFamilyMonospace: 'monospace',
   headings: {
     fontFamily: 'Roboto, sans-serif',
