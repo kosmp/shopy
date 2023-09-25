@@ -1,4 +1,4 @@
-import {memo, FC, useState} from 'react';
+import { memo, FC, useState } from 'react';
 import { RoutePath } from 'routes';
 import {
   Header as LayoutHeader,
@@ -35,7 +35,6 @@ const Header: FC = () => {
         </Link>
         <MarketplaceMainTabs />
         <CartAndLogout cartItemCount={cartItemCount} />
-        {/* <UserMenu /> */}
       </Container>
     </LayoutHeader>
   );

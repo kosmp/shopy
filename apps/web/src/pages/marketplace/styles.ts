@@ -18,4 +18,7 @@ export const useStyles = createStyles(() => ({
   activeFilterPillsGroup: {
     display: 'inline-flex',
   },
+  pagination: {
+    marginTop: '31px',
+  },
 }));
