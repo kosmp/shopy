@@ -30,6 +30,8 @@ const appTheme: MantineThemeOverride = {
           borderRadius: '12px',
           border: '1.126px solid var(--Black-100, #ECECEE)',
           background: '#FFF',
+          overflow: 'hidden',
+          position: 'relative',
         },
       }),
     },

@@ -16,6 +16,7 @@ const Products : FC<ProductsProps> = ({ products }) => (
           name={product.name}
           price={product.price}
           image={product.image}
+          sold={product.sold}
         />
       </Grid.Col>
     ))}

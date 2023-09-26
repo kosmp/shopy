@@ -23,12 +23,12 @@ import { useStyles } from './styles';
 import ActiveFilterPill from '../../components/ActiveFilterPill/ActiveFilterPill';
 
 const products : Product[] = [
-  { id: 1, name: 'Product 1', price: 24, image: '' },
-  { id: 2, name: 'Product 2', price: 654, image: '' },
-  { id: 3, name: 'Product 3', price: 23, image: '' },
-  { id: 4, name: 'Product 4', price: 75, image: '' },
-  { id: 5, name: 'Product 5', price: 643, image: '' },
-  { id: 6, name: 'Product 6', price: 135, image: '' },
+  { id: 1, name: 'Product 1', price: 24, image: 'images/test-image1.png', sold: false },
+  { id: 2, name: 'Product 2', price: 654, image: 'images/test-image2.png', sold: false },
+  { id: 3, name: 'Product 3', price: 23, image: 'images/test-image2.png', sold: false },
+  { id: 4, name: 'Product 4', price: 75, image: 'images/test-image2.png', sold: false },
+  { id: 5, name: 'Product 5', price: 643, image: 'images/test-image2.png', sold: false },
+  { id: 6, name: 'Product 6', price: 135, image: 'images/test-image2.png', sold: false },
 ];
 
 const Marketplace: NextPage = () => {

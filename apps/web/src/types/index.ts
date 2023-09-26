@@ -7,6 +7,7 @@ export interface Product {
   name: string;
   price: number;
   image: string;
+  sold: boolean;
 }
 
 export interface FilterProps {
