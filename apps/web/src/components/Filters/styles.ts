@@ -3,8 +3,6 @@ import { createStyles } from '@mantine/core';
 export const useStyles = createStyles(() => ({
   filterCard: {
     padding: '20px',
-    borderRadius: '12px',
-    border: '1px solid var(--Black-100, #ECECEE)',
   },
   firstRow: {
     justifyContent: 'space-between',
