@@ -1,10 +1,10 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Product } from 'types';
 import { Group, Image, Paper, Stack, Text, UnstyledButton, Badge, Box } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { useStyles } from './styles';
 
-const Card : FC<Product> = ({ image, name, price, id, sold }) => {
+const Card : FC<Product> = ({ imageUrl, productName, productPrice, _id, soldOut }) => {
   const { classes } = useStyles();
 
   const handleTrashButton = () => {
@@ -17,18 +17,18 @@ const Card : FC<Product> = ({ image, name, price, id, sold }) => {
         <UnstyledButton className={classes.trashButton} onClick={handleTrashButton}>
           <IconTrash color="gray" />
         </UnstyledButton>
-        <Badge size="lg" className={sold ? classes.productSoldBadge : classes.productOnSaleBadge}>
-          {sold ? 'Sold' : 'On sale'}
+        <Badge size="lg" className={soldOut ? classes.productSoldBadge : classes.productOnSaleBadge}>
+          {soldOut ? 'Sold' : 'On sale'}
         </Badge>
-        <Image src={image} />
+        <Image src={imageUrl} />
       </Box>
       <Stack spacing="12px" className={classes.namePriceStack}>
-        <Text className={classes.text}>{name}</Text>
+        <Text className={classes.text}>{productName}</Text>
         <Group position="apart">
           <Text className={classes.priceTitleText}>Price:</Text>
           <Text className={classes.text}>
             $
-            {price}
+            {productPrice}
           </Text>
         </Group>
       </Stack>

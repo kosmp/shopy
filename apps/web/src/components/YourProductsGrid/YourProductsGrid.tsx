@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
-import { Grid, Paper, Stack, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
+import { Grid, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
 import { Product } from 'types';
 import { IconPlus } from '@tabler/icons-react';
+import Link from 'next/link';
+import { RoutePath } from 'routes';
 import YourProductCard from '../YourProductCard/YourProductCard';
 import { useStyles } from './styles';
 
@@ -9,17 +11,13 @@ interface ProductsProps {
   products: Product[];
 }
 
-const handleNewProductButton = () => {
-
-};
-
 const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
   const { classes } = useStyles();
 
   return (
     <Grid gutter="lg">
       <Grid.Col span={2}>
-        <UnstyledButton className={classes.newProduct} onClick={handleNewProductButton}>
+        <Link href={RoutePath.CreateProduct} className={classes.newProduct}>
           <Paper className={classes.newProduct}>
             <Stack spacing="12px" align="center">
               <ThemeIcon radius="xl" size="40px">
@@ -30,16 +28,16 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
               </Text>
             </Stack>
           </Paper>
-        </UnstyledButton>
+        </Link>
       </Grid.Col>
       {products.map((product: Product) => (
-        <Grid.Col span={2} key={product.id}>
+        <Grid.Col span={2} key={product._id}>
           <YourProductCard
-            id={product.id}
-            name={product.name}
-            price={product.price}
-            image={product.image}
-            sold={product.sold}
+            _id={product._id}
+            productName={product.productName}
+            productPrice={product.productPrice}
+            imageUrl={product.imageUrl}
+            soldOut={product.soldOut}
           />
         </Grid.Col>
       ))}

@@ -5,8 +5,8 @@ import { Product } from 'types';
 import { useStyles } from './styles';
 
 const products : Product[] = [
-  { id: 1, name: 'Product 1', price: 24, image: 'images/test-image1.png', sold: false },
-  { id: 2, name: 'Product 2', price: 654, image: 'images/test-image2.png', sold: true },
+  { _id: '1', productName: 'Product 1', productPrice: 24, imageUrl: 'images/test-image1.png', soldOut: false },
+  { _id: '2', productName: 'Product 2', productPrice: 654, imageUrl: 'images/test-image2.png', soldOut: true },
 ];
 
 const YourProducts: NextPage = () => {
