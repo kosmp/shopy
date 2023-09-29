@@ -8,58 +8,87 @@ import {
   Text,
   TextInput,
   Space,
-  NativeSelect,
-  Group, UnstyledButton, Pagination,
+  Select,
+  Group, UnstyledButton, SelectItem, Container, Skeleton, Pagination,
 } from '@mantine/core';
 
 import { IconArrowsDownUp, IconChevronDown } from '@tabler/icons-react';
 import { Search } from 'public/images';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 import { Products, Filters } from 'components';
-import { Product } from 'types';
-import { useDebouncedValue } from '@mantine/hooks';
+// import { useDebouncedValue } from '@mantine/hooks';
+import ActiveFilterPill from 'components/ActiveFilterPill/ActiveFilterPill';
+import { productApi } from 'resources/product';
 import { useStyles } from './styles';
-import ActiveFilterPill from '../../components/ActiveFilterPill/ActiveFilterPill';
 
-const products : Product[] = [
-  { id: 1, name: 'Product 1', price: 24, image: 'images/test-image1.png', sold: false },
-  { id: 2, name: 'Product 2', price: 654, image: 'images/test-image2.png', sold: false },
-  { id: 3, name: 'Product 3', price: 23, image: 'images/test-image2.png', sold: false },
-  { id: 4, name: 'Product 4', price: 75, image: 'images/test-image2.png', sold: false },
-  { id: 5, name: 'Product 5', price: 643, image: 'images/test-image2.png', sold: false },
-  { id: 6, name: 'Product 6', price: 135, image: 'images/test-image2.png', sold: false },
+const selectOptions: SelectItem[] = [
+  {
+    value: 'newest',
+    label: 'Sort by newest',
+  },
+  {
+    value: 'oldest',
+    label: 'Sort by oldest',
+  },
 ];
+
+interface ProductsListParams {
+  page?: number;
+  perPage?: number;
+  searchValue?: string;
+  sort?: {
+    createdOn: 'asc' | 'desc';
+  };
+  filter?: {
+    productPrice?: {
+      minPrice: number | '';
+      maxPrice: number | '';
+    };
+  };
+}
+
+const ITEMS_PER_PAGE = 6;
 
 const Marketplace: NextPage = () => {
   const { classes } = useStyles();
-  const [numberOfResults, setNumberOfResults] = useState(0);
-  const [numberOfPages, setNumberOfPages] = useState(1);
-  const [selectedOption, setSelectedOption] = useState('Sort by newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState(selectOptions[0].value);
   const [inputFilterValueFrom, setInputFilterValueFrom] = useState<number | ''>('');
   const [inputFilterValueTo, setInputFilterValueTo] = useState<number | ''>('');
   const [valueToSearch, setValueToSearch] = useState('');
-  const [debouncedValueToSearch] = useDebouncedValue<string>(valueToSearch.toString(), 1500);
+  // const [debouncedValueToSearch] = useDebouncedValue<string>(valueToSearch.toString(), 1500);
 
-  const handleSwitchClick = () => {
-    setSelectedOption(selectedOption === 'Sort by newest' ? 'Sort by oldest' : 'Sort by newest');
-  };
+  const [params, setParams] = useState<ProductsListParams>({});
+  const { data, isLoading: isListLoading } = productApi.useList(params);
+
+  const handleSort = useCallback((value: string) => {
+    setSortBy(value);
+    setParams((prev) => ({
+      ...prev,
+      sort: value === 'newest' ? { createdOn: 'desc' } : { createdOn: 'asc' },
+    }));
+  }, []);
+
+  const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setValueToSearch(event.target.value);
+  }, []);
 
   useEffect(() => {
-
-  }, [selectedOption]);
-
-  useEffect(() => {
-
-  }, [debouncedValueToSearch]);
-
-  useEffect(() => {
-    // if (inputFilterValueFrom !== ''
-    //     && inputFilterValueTo !== ''
-    //     && inputFilterValueFrom < inputFilterValueTo
-    // ) {
-    //
-    // }
+    if (inputFilterValueFrom !== ''
+        && inputFilterValueTo !== ''
+        && inputFilterValueFrom < inputFilterValueTo
+    ) {
+      setParams((prev) => ({
+        ...prev,
+        filter: { productPrice: { minPrice: inputFilterValueFrom, maxPrice: inputFilterValueTo } },
+      }));
+    } else {
+      setParams((prev) => ({
+        ...prev,
+        filter: {},
+      }));
+    }
   }, [inputFilterValueFrom, inputFilterValueTo]);
 
   return (
@@ -84,27 +113,27 @@ const Marketplace: NextPage = () => {
               radius="8px"
               size="lg"
               value={valueToSearch}
-              onChange={(event) => setValueToSearch(event.currentTarget.value)}
+              onChange={handleSearch}
             />
             <Stack>
               <Flex className={classes.activeFiltersAndResults}>
                 <Text>
-                  {numberOfResults}
+                  {data?.count ?? 0}
                   {' '}
                   Results
                 </Text>
                 <Group>
                   <UnstyledButton
                     className={classes.switchButton}
-                    onClick={handleSwitchClick}
+                    onClick={() => setSortBy(sortBy === 'newest' ? 'oldest' : 'newest')}
                   >
                     <IconArrowsDownUp size="16px" color="gray" />
                   </UnstyledButton>
-                  <NativeSelect
+                  <Select
                     className={classes.selectSort}
-                    data={['Sort by newest', 'Sort by oldest']}
-                    value={selectedOption}
-                    onChange={(event) => setSelectedOption(event.target.value)}
+                    data={selectOptions}
+                    value={sortBy}
+                    onChange={handleSort}
                     variant="unstyled"
                     rightSection={<IconChevronDown />}
                     rightSectionWidth={20}
@@ -121,13 +150,41 @@ const Marketplace: NextPage = () => {
                 />
               </Group>
             </Stack>
-            <Products
-              products={products}
-            />
+            {isListLoading && (
+            <>
+              {[1, 2, 3].map((item) => (
+                <Skeleton
+                  key={`sklton-${String(item)}`}
+                  height={50}
+                  radius="sm"
+                  mb="sm"
+                />
+              ))}
+            </>
+            )}
+            {data?.items.length ? (
+              <Products
+                data={data.items}
+                currentPage={currentPage}
+                itemsPerPage={ITEMS_PER_PAGE}
+              />
+            ) : (
+              <Container p={75}>
+                <Text size="xl" color="grey">
+                  No products available.
+                </Text>
+              </Container>
+            )}
           </Stack>
         </Grid.Col>
       </Grid>
-      <Pagination total={numberOfPages} position="center" className={classes.pagination} />
+      <Pagination
+        total={Math.ceil(data?.items.length ?? 0 / ITEMS_PER_PAGE)}
+        value={currentPage}
+        onChange={(newPage) => setCurrentPage(newPage)}
+        position="center"
+        className={classes.pagination}
+      />
     </>
   );
 };

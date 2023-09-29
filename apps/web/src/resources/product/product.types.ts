@@ -6,8 +6,5 @@ export interface Product {
   imageUrl: string;
   productName: string;
   productPrice: number;
-  userFirstNameCreatedBy: string;
-  userLastNameCreatedBy: string;
-  userFullNameCreatedBy: string;
-  userEmailCreatedBy: string;
+  soldOut: boolean;
 }

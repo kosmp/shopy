@@ -3,11 +3,11 @@ import { Dispatch, SetStateAction } from 'react';
 export type QueryParam = string | string[] | undefined;
 
 export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  sold: boolean;
+  _id: string;
+  productName: string;
+  productPrice: number;
+  imageUrl: string;
+  soldOut: boolean;
 }
 
 export interface FilterProps {

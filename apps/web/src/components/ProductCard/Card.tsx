@@ -9,7 +9,7 @@ import { FC } from 'react';
 import { Product } from 'types';
 import { useStyles } from './styles';
 
-const Card : FC<Product> = ({ image, name, price, id, sold }) => {
+const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut }) => {
   const { classes } = useStyles();
 
   const handleAddToCart = () => {
@@ -19,15 +19,15 @@ const Card : FC<Product> = ({ image, name, price, id, sold }) => {
   return (
     <Paper>
       <Stack>
-        <Image src={image} />
+        <Image src={imageUrl} />
         <Stack className={classes.namePriceButtonStack}>
           <Stack spacing="13.51px">
-            <Text className={classes.text}>{name}</Text>
+            <Text className={classes.text}>{productName}</Text>
             <Group position="apart">
               <Text className={classes.priceTitleText}>Price:</Text>
               <Text className={classes.text}>
                 $
-                {price}
+                {productPrice}
               </Text>
             </Group>
           </Stack>

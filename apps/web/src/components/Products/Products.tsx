@@ -4,23 +4,32 @@ import { Product } from 'types';
 import Card from '../ProductCard/Card';
 
 interface ProductsProps {
-  products: Product[];
+  data: Product[];
+  currentPage: number;
+  itemsPerPage: number;
 }
 
-const Products : FC<ProductsProps> = ({ products }) => (
-  <Grid gutter="lg">
-    {products.map((product : Product) => (
-      <Grid.Col span={4} key={product.id}>
-        <Card
-          id={product.id}
-          name={product.name}
-          price={product.price}
-          image={product.image}
-          sold={product.sold}
-        />
-      </Grid.Col>
-    ))}
-  </Grid>
-);
+const Products : FC<ProductsProps> = ({ data, currentPage, itemsPerPage }) => {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const visibleProducts = data.slice(startIndex, endIndex);
+
+  return (
+    <Grid gutter="lg">
+      {visibleProducts.map((product: Product) => (
+        <Grid.Col span={4} key={product._id}>
+          <Card
+            _id={product._id}
+            productName={product.productName}
+            productPrice={product.productPrice}
+            imageUrl={product.imageUrl}
+            soldOut={product.soldOut}
+          />
+        </Grid.Col>
+      ))}
+    </Grid>
+  );
+};
 
 export default Products;

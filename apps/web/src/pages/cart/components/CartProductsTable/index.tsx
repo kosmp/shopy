@@ -6,8 +6,7 @@ import {
   RowData,
   useReactTable,
 } from '@tanstack/react-table';
-import { Paper } from '@mantine/core';
-import { Table as TableContainer } from '@mantine/core/lib/Table/Table';
+import { Paper, Table as TableContainer } from '@mantine/core';
 import Thead from './thead';
 import Tbody from './tbody';
 
