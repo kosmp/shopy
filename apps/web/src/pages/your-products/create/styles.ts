@@ -9,7 +9,7 @@ export const useStyles = createStyles(() => ({
     fontWeight: 600,
     lineHeight: 'normal',
   },
-  inputText: {
+  input: {
     width: '694px',
   },
   uploadButton: {

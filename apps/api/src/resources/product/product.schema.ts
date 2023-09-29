@@ -9,6 +9,7 @@ const schema = z.object({
   soldOut: z.boolean().default(false),
 
   createdOn: z.date().optional(),
+  updatedOn: z.date().optional(),
   lastRequest: z.date().optional(),
   deletedOn: z.date().optional().nullable(),
 }).strict();
