@@ -4,24 +4,22 @@ const appTheme: MantineThemeOverride = {
   fontFamily: 'Inter',
   components: {
     Button: {
-      defaultProps: { size: 'lg' },
+      defaultProps: { size: 'sm' },
       styles: () => ({
         label: {
           color: '#FFF',
-          textAlign: 'center',
           fontsize: '14px',
           fontStyle: 'normal',
           fontWeight: 500,
-          lineHeight: '21px',
           display: 'flex',
-          height: '40px',
-          padding: '4px 20px',
           justifyContent: 'center',
-          alignItems: 'center',
-          gap: '10px',
-          flex: '1 0 0',
+        },
+        root: {
+          padding: '4px 20px',
+          borderRadius: '8px',
         },
       }),
+
     },
     Paper: {
       defaultProps: { size: 'lg' },
