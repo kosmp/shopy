@@ -23,7 +23,7 @@ const Create: NextPage = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('1');
-  const { mutate: uploadProduct } = productApi.useUploadProduct();
+  const { mutate: uploadProduct } = productApi.useUploadProduct<FormData>();
   const [titleError, setTitleError] = useState<string>('');
   const [priceError, setPriceError] = useState<string>('');
   const [imageError, setImageError] = useState<string | null>(null);
@@ -71,13 +71,14 @@ const Create: NextPage = () => {
       return;
     }
 
-    if (isFileFormatCorrect(imageFile) && isFileSizeCorrect(imageFile) && imageUrl && price && title) {
-      await uploadProduct({
-        productName: title,
-        productPrice: Number(price),
-        imageUrl,
-        soldOut: false,
-      }, {
+    if (isFileFormatCorrect(imageFile) && isFileSizeCorrect(imageFile)) {
+      const body = new FormData();
+      body.append('file', imageFile, imageFile.name);
+      body.append('productName', title);
+      body.append('productPrice', price);
+      body.append('soldOut', String(false));
+
+      await uploadProduct(body, {
         onSuccess: () => router.push('/your-products'),
         onError: (err) => handleError(err),
       });

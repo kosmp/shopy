@@ -1,29 +1,23 @@
 import { AppKoaContext, AppRouter, Next } from 'types';
-import { Product, productService } from 'resources/product';
+import { productService } from 'resources/product';
 import { validateMiddleware } from 'middlewares';
 import { z } from 'zod';
+import { cloudStorageService } from 'services';
+import multer from '@koa/multer';
+
+const uploader = multer();
 
 const schema = z.object({
   productName: z.string().min(1, 'Please enter Product name').max(30),
-  productPrice: z.number().min(1, 'Please enter Product price').max(10000000),
-  imageUrl: z.string().min(10, 'Please insert Product image'),
-  soldOut: z.boolean().default(false),
+  productPrice: z.string().min(1, 'Please enter Product price').max(8),
+  soldOut: z.string().default('false'),
 });
 
-interface ValidatedData extends z.infer<typeof schema> {
-  product: Product;
-}
-type Request = {
-  body: {
-    productName: string;
-    productPrice: number;
-    imageUrl: string;
-    soldOut: boolean;
-  };
-};
+type ValidatedData = z.infer<typeof schema>;
 
-async function validator(ctx: AppKoaContext<ValidatedData, Request>, next: Next) {
-  const { productName } = ctx.request.body;
+
+async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
+  const { productName } = ctx.validatedData;
   const isProductExists = await productService.exists({ productName });
 
   ctx.assertError(!isProductExists, 'Product with such name already exists');
@@ -31,18 +25,53 @@ async function validator(ctx: AppKoaContext<ValidatedData, Request>, next: Next)
   await next();
 }
 
-async function handler(ctx: AppKoaContext<ValidatedData, Request>) {
-  const { productName, productPrice, imageUrl, soldOut } = ctx.request.body;
-  
-  ctx.body = await productService.insertOne({
-    productName: productName,
-    productPrice: productPrice,
-    imageUrl: imageUrl,
-    soldOut: soldOut,
-  });
+interface CloudinaryUploadResult {
+  secure_url: string;
+}
+
+async function handler(ctx: AppKoaContext<ValidatedData>) {
+  const { productName, productPrice, soldOut } = ctx.validatedData;
+  const { file } = ctx.request;
+
+  try {
+    const res = await new Promise<CloudinaryUploadResult | undefined>((resolve, reject) => {
+      cloudStorageService.uploader.upload_stream(
+        { resource_type: 'auto' },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        },
+      ).end(file.buffer);
+    });
+
+    if (res) {
+      ctx.body = {
+        imageUrl: res.secure_url,
+        productName,
+        productPrice: Number(productPrice),
+        soldOut: Boolean(soldOut),
+      };
+
+      await productService.insertOne({
+        imageUrl: res.secure_url,
+        productName,
+        productPrice: Number(productPrice),
+        soldOut: Boolean(soldOut),
+      });
+    } else {
+      ctx.status = 500;
+      ctx.body = { error: 'No result received from cloud storage' };
+    }
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { error: 'Error uploading to cloud storage' };
+  }
 }
 
 
 export default (router: AppRouter) => {
-  router.post('/', validateMiddleware(schema), validator, handler);
+  router.post('/', uploader.single('file'), validateMiddleware(schema), validator, handler);
 };

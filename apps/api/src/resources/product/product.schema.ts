@@ -6,7 +6,7 @@ const schema = z.object({
   productName: z.string(),
   productPrice: z.number(),
   imageUrl: z.string(),
-  soldOut: z.boolean().default(false),
+  soldOut: z.boolean(),
 
   createdOn: z.date().optional(),
   updatedOn: z.date().optional(),

@@ -29,6 +29,7 @@
     "@socket.io/redis-adapter": "8.1.0",
     "@socket.io/redis-emitter": "5.1.0",
     "bcryptjs": "2.4.3",
+    "cloudinary": "1.41.0",
     "dotenv": "16.0.3",
     "google-auth-library": "8.7.0",
     "koa": "2.14.1",
