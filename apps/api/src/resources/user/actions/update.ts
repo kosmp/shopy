@@ -4,40 +4,44 @@ import { AppKoaContext, Next, AppRouter } from 'types';
 import { validateMiddleware } from 'middlewares';
 import { userService } from 'resources/user';
 
-import { emailRegex } from 'resources/account/account.constants';
-
 const schema = z.object({
-  firstName: z.string().min(1, 'Please enter First name').max(100),
-  lastName: z.string().min(1, 'Please enter Last name').max(100),
-  email: z.string().regex(emailRegex, 'Email format is incorrect.'),
+  productId: z.string(),
 });
 
 type ValidatedData = z.infer<typeof schema>;
-type Request = {
-  params: {
-    id: string;
-  }
-};
 
-async function validator(ctx: AppKoaContext<ValidatedData, Request>, next: Next) {
-  const isUserExists = await userService.exists({ _id: ctx.request.params.id });
+async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
+  const isUserExists = await userService.exists({ _id: ctx.state.user._id });
 
   ctx.assertError(isUserExists, 'User not found');
 
   await next();
 }
 
-async function handler(ctx: AppKoaContext<ValidatedData, Request>) {
-  const { firstName, lastName, email } = ctx.validatedData;
+async function handler(ctx: AppKoaContext<ValidatedData>) {
+  const { productId } = ctx.validatedData;
 
-  const updatedUser = await userService.updateOne(
-    { _id: ctx.request.params?.id },
-    () => ({ firstName, lastName, email }),
-  );
+  const user = await userService.findOne({ _id: ctx.state.user._id });
 
-  ctx.body = userService.getPublic(updatedUser);
+  if (user && user.productsInCart.length !== undefined && productId) {
+    if (!user.productsInCart.includes(productId)) {
+      user.productsInCart.push(productId);
+
+      const updatedUser = await userService.updateOne(
+        { _id: ctx.state.user._id },
+        () => ({ productsInCart: user.productsInCart }),
+      );
+
+      ctx.body = userService.getPublic(updatedUser);
+    } else {
+      ctx.body = userService.getPublic(user);
+    }
+  } else {
+    ctx.status = 404;
+    ctx.body = { message: 'User not found or no productsInCart field' };
+  }
 }
 
 export default (router: AppRouter) => {
-  router.put('/:id', validator, validateMiddleware(schema), handler);
+  router.patch('/', validator, validateMiddleware(schema), handler);
 };

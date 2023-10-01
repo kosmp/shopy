@@ -10,20 +10,8 @@ const service = db.createService<Product>(DATABASE_DOCUMENTS.PRODUCTS, {
   schemaValidator: (obj) => schema.parseAsync(obj),
 });
 
-const updateLastRequest = (_id: string) => {
-  return service.atomic.updateOne(
-    { _id },
-    {
-      $set: {
-        lastRequest: new Date(),
-      },
-    },
-  );
-};
-
 const getPublic = (product: Product | null) => _.omit(product, []);
 
 export default Object.assign(service, {
-  updateLastRequest,
   getPublic,
 });

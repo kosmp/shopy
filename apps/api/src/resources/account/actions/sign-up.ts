@@ -53,6 +53,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     passwordHash: hash.toString(),
     isEmailVerified: false,
     signupToken,
+    productsInCart: [],
   });
 
   await emailService.sendTemplate<Template.VERIFY_EMAIL>({

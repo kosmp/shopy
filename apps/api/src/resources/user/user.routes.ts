@@ -10,11 +10,11 @@ const publicRoutes = routeUtil.getRoutes([
 
 const privateRoutes = routeUtil.getRoutes([
   list,
+  update,
 ]);
 
 const adminRoutes = routeUtil.getRoutes([
   list,
-  update,
   remove,
 ]);
 

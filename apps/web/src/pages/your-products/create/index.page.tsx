@@ -23,10 +23,12 @@ const Create: NextPage = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('1');
+  const [count, setCount] = useState('1');
   const { mutate: uploadProduct } = productApi.useUploadProduct<FormData>();
   const [titleError, setTitleError] = useState<string>('');
   const [priceError, setPriceError] = useState<string>('');
   const [imageError, setImageError] = useState<string | null>(null);
+  const [countError, setCountError] = useState<string | null>(null);
 
   const handleFileChange = (selectedFile: File | null) => {
     setImageError(null);
@@ -66,6 +68,11 @@ const Create: NextPage = () => {
       setPriceError('Please fill in the correct product price');
     }
 
+    if (!count) {
+      setImageError('Please fill in available count');
+      return;
+    }
+
     if (!imageFile) {
       setImageError('Please import product photo');
       return;
@@ -76,6 +83,7 @@ const Create: NextPage = () => {
       body.append('file', imageFile, imageFile.name);
       body.append('productName', title);
       body.append('productPrice', price);
+      body.append('productCount', count);
       body.append('soldOut', String(false));
 
       await uploadProduct(body, {
@@ -136,15 +144,41 @@ const Create: NextPage = () => {
 
               const numericValue = inputValue.replace(/[^0-9]/g, '');
 
-              if (Number(numericValue) > 10000000) {
-                inputElement.value = '10000000';
-                setPrice('10000000');
+              if (Number(numericValue) > 99999999) {
+                inputElement.value = '99999999';
+                setPrice('99999999');
               } else {
                 inputElement.value = numericValue;
                 setPrice(numericValue === '' ? '1' : numericValue);
               }
             }}
             error={priceError}
+          />
+        </Stack>
+        <Stack spacing="8px">
+          <Text size="16px" className={classes.text}>Count of products</Text>
+          <NumberInput
+            hideControls
+            placeholder="Enter available count of products"
+            radius="8px"
+            className={classes.input}
+            value={Number(count) ?? 1}
+            onInput={(e) => {
+              setCountError('');
+              const inputElement = e.target as HTMLInputElement;
+              const inputValue = inputElement.value;
+
+              const numericValue = inputValue.replace(/[^0-9]/g, '');
+
+              if (Number(numericValue) > 99999999) {
+                inputElement.value = '99999999';
+                setCount('99999999');
+              } else {
+                inputElement.value = numericValue;
+                setCount(numericValue === '' ? '1' : numericValue);
+              }
+            }}
+            error={countError}
           />
         </Stack>
       </Stack>

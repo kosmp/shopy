@@ -10,6 +10,7 @@ const uploader = multer();
 const schema = z.object({
   productName: z.string().min(1, 'Please enter Product name').max(30),
   productPrice: z.string().min(1, 'Please enter Product price').max(8),
+  productCount: z.string().min(1, 'Please enter Product count').max(8),
   soldOut: z.string().default('false'),
 });
 
@@ -31,7 +32,7 @@ interface CloudinaryUploadResult {
 }
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
-  const { productName, productPrice, soldOut } = ctx.validatedData;
+  const { productName, productPrice, soldOut, productCount } = ctx.validatedData;
   const { file } = ctx.request;
 
   try {
@@ -54,6 +55,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
         imagePublicId: res.public_id,
         productName,
         productPrice: Number(productPrice),
+        productCount: Number(productCount),
         soldOut: soldOut === 'true',
         createdBy: ctx.state.user._id,
       };
@@ -63,6 +65,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
         imagePublicId: res.public_id,
         productName,
         productPrice: Number(productPrice),
+        productCount: Number(productCount),
         soldOut: soldOut === 'true',
         createdBy: ctx.state.user._id,
       });

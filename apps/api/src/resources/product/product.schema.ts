@@ -9,6 +9,7 @@ const schema = z.object({
   imagePublicId: z.string(),
   soldOut: z.boolean(),
   createdBy: z.string(),
+  productCount: z.number(),
 
   createdOn: z.date().optional(),
   updatedOn: z.date().optional(),

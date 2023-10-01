@@ -15,6 +15,7 @@ const schema = z.object({
   oauth: z.object({
     google: z.boolean().default(false),
   }).optional(),
+  productsInCart: z.array(z.string()),
 
   createdOn: z.date().optional(),
   updatedOn: z.date().optional(),
