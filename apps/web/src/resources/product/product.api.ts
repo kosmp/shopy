@@ -24,3 +24,13 @@ export function useUploadProduct<T>() {
     },
   });
 }
+
+export function useRemoveProduct(id: string) {
+  const removeProduct = () => apiService.delete(`/products/${id}`);
+
+  return useMutation<Product>(removeProduct, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['products']);
+    },
+  });
+}

@@ -3,12 +3,14 @@ import { Product } from 'types';
 import { Group, Image, Paper, Stack, Text, UnstyledButton, Badge, Box } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { useStyles } from './styles';
+import { productApi } from '../../resources/product';
 
 const Card : FC<Product> = ({ imageUrl, productName, productPrice, _id, soldOut }) => {
   const { classes } = useStyles();
+  const { mutate: removeProduct } = productApi.useRemoveProduct(_id);
 
   const handleTrashButton = () => {
-
+    removeProduct();
   };
 
   return (

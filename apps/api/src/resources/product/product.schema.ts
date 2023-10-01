@@ -6,12 +6,12 @@ const schema = z.object({
   productName: z.string(),
   productPrice: z.number(),
   imageUrl: z.string(),
+  imagePublicId: z.string(),
   soldOut: z.boolean(),
+  createdBy: z.string(),
 
   createdOn: z.date().optional(),
   updatedOn: z.date().optional(),
-  lastRequest: z.date().optional(),
-  deletedOn: z.date().optional().nullable(),
 }).strict();
 
 export default schema;

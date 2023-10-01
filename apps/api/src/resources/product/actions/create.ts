@@ -27,6 +27,7 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
 
 interface CloudinaryUploadResult {
   secure_url: string;
+  public_id: string;
 }
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
@@ -50,16 +51,20 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     if (res) {
       ctx.body = {
         imageUrl: res.secure_url,
+        imagePublicId: res.public_id,
         productName,
         productPrice: Number(productPrice),
-        soldOut: Boolean(soldOut),
+        soldOut: soldOut === 'true',
+        createdBy: ctx.state.user._id,
       };
 
       await productService.insertOne({
         imageUrl: res.secure_url,
+        imagePublicId: res.public_id,
         productName,
         productPrice: Number(productPrice),
-        soldOut: Boolean(soldOut),
+        soldOut: soldOut === 'true',
+        createdBy: ctx.state.user._id,
       });
     } else {
       ctx.status = 500;

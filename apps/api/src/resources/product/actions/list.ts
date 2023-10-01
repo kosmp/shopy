@@ -17,31 +17,44 @@ const schema = z.object({
     }).optional(),
   }).optional(),
   searchValue: z.string().default(''),
+  showYourProducts: z.string().default('false'),
+  showNotSoldOut: z.string().default('true'),
 });
 
 type ValidatedData = z.infer<typeof schema>;
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const {
-    perPage, page, sort, searchValue, filter,
+    perPage, page, sort, searchValue, filter, showYourProducts, showNotSoldOut,
   } = ctx.validatedData;
 
     type QueryType = {
       productName?: { $regex: RegExp };
       productPrice?: { $gte: number; $lte: number };
+      createdBy?: { $eq: string };
+      soldOut?: { $eq: boolean }
     };
 
-    const query: QueryType = {};
+    const query: QueryType = { };
+
+    if (showNotSoldOut === 'true') {
+      query.soldOut = { $eq: false };
+    }
 
     if (searchValue) {
       const regExp = new RegExp(searchValue, 'gi');
       query.productName = { $regex: regExp };
     }
+
     if (filter?.productPrice !== undefined) {
       query.productPrice = {
         $gte: Number(filter.productPrice.minPrice),
         $lte: Number(filter.productPrice.maxPrice),
       };
+    }
+
+    if (showYourProducts === 'true') {
+      query.createdBy = { $eq: ctx.state.user._id };
     }
 
     const products = await productService.find(

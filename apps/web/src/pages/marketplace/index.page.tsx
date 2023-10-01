@@ -165,7 +165,7 @@ const Marketplace: NextPage = () => {
               ))}
             </>
             )}
-            {data?.items.length ? (
+            {data?.items.length && !isListLoading ? (
               <Products
                 data={data.items}
                 currentPage={currentPage}
