@@ -17,4 +17,5 @@ export interface User {
   oauth?: {
     google: boolean
   };
+  productsInCart: Array<string>
 }

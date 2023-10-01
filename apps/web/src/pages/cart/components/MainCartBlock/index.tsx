@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Container, Skeleton, Stack, Text } from '@mantine/core';
 import { productTypes, productApi } from 'resources/product';
 import { ColumnDef } from '@tanstack/react-table';
+import { accountApi } from 'resources/account';
 import CartProductsTable from '../CartProductsTable/index';
 // import { useStyles } from '../Summary/styles';
 import CartSlider from '../CartSlider';
@@ -31,7 +32,15 @@ const columns: ColumnDef<productTypes.Product>[] = [
 
 const MainCartBlock: FC = () => {
   // const { classes } = useStyles();
-  const { data, isLoading: isListLoading } = productApi.useList({});
+  const { data: allProducts, isLoading: isListLoading } = productApi.useList({});
+  const { data: currentUser } = accountApi.useGet();
+  const [data, setData] = useState<Array<productTypes.Product>>([]);
+
+  useEffect(() => {
+    if (currentUser !== undefined && allProducts !== undefined) {
+      setData(allProducts.items.filter((item) => currentUser.productsInCart.includes(item._id)));
+    }
+  }, [allProducts, currentUser, currentUser?.productsInCart]);
 
   return (
     <Stack spacing="20px">
@@ -48,10 +57,10 @@ const MainCartBlock: FC = () => {
         ))}
       </>
       )}
-      {data?.items.length ? (
+      {data.length ? (
         <CartProductsTable
           columns={columns}
-          data={data.items}
+          data={data}
         />
       ) : (
         <Container p={75}>
