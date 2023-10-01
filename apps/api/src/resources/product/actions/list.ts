@@ -12,10 +12,10 @@ const schema = z.object({
   }).default({ createdOn: 'desc' }),
   filter: z.object({
     productPrice: z.object({
-      minPrice: z.number().optional(),
-      maxPrice: z.number().optional(),
-    }).nullable().default(null),
-  }).nullable().default(null),
+      minPrice: z.string(),
+      maxPrice: z.string(),
+    }).optional(),
+  }).optional(),
   searchValue: z.string().default(''),
 });
 
@@ -28,7 +28,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 
     type QueryType = {
       productName?: { $regex: RegExp };
-      productPrice?: { $gte?: number; $lte?: number };
+      productPrice?: { $gte: number; $lte: number };
     };
 
     const query: QueryType = {};
@@ -37,17 +37,11 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       const regExp = new RegExp(searchValue, 'gi');
       query.productName = { $regex: regExp };
     }
-
-    if (filter?.productPrice?.minPrice !== undefined || filter?.productPrice?.maxPrice !== undefined) {
-      query.productPrice = {};
-
-      if (filter.productPrice.minPrice !== undefined) {
-        query.productPrice.$gte = filter.productPrice.minPrice;
-      }
-
-      if (filter.productPrice.maxPrice !== undefined) {
-        query.productPrice.$lte = filter.productPrice.maxPrice;
-      }
+    if (filter?.productPrice !== undefined) {
+      query.productPrice = {
+        $gte: Number(filter.productPrice.minPrice),
+        $lte: Number(filter.productPrice.maxPrice),
+      };
     }
 
     const products = await productService.find(

@@ -9,28 +9,22 @@ import {
   TextInput,
   Space,
   Select,
-  Group, UnstyledButton, SelectItem, Container, Skeleton, Pagination,
+  Group, UnstyledButton, Container, Skeleton, Pagination,
 } from '@mantine/core';
 
 import { IconArrowsDownUp, IconChevronDown } from '@tabler/icons-react';
 import { Search } from 'public/images';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { Products, Filters } from 'components';
-// import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import ActiveFilterPill from 'components/ActiveFilterPill/ActiveFilterPill';
 import { productApi } from 'resources/product';
 import { useStyles } from './styles';
 
-const selectOptions: SelectItem[] = [
-  {
-    value: 'newest',
-    label: 'Sort by newest',
-  },
-  {
-    value: 'oldest',
-    label: 'Sort by oldest',
-  },
+const selectOptions = [
+  'Sort by newest',
+  'Sort by oldest',
 ];
 
 interface ProductsListParams {
@@ -42,8 +36,8 @@ interface ProductsListParams {
   };
   filter?: {
     productPrice?: {
-      minPrice: number | '';
-      maxPrice: number | '';
+      minPrice: number;
+      maxPrice: number;
     };
   };
 }
@@ -53,26 +47,26 @@ const ITEMS_PER_PAGE = 6;
 const Marketplace: NextPage = () => {
   const { classes } = useStyles();
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState(selectOptions[0].value);
+  const [sortBy, setSortBy] = useState(selectOptions[0]);
   const [inputFilterValueFrom, setInputFilterValueFrom] = useState<number | ''>('');
   const [inputFilterValueTo, setInputFilterValueTo] = useState<number | ''>('');
   const [valueToSearch, setValueToSearch] = useState('');
-  // const [debouncedValueToSearch] = useDebouncedValue<string>(valueToSearch.toString(), 1500);
+  const [debouncedValueToSearch] = useDebouncedValue<string>(valueToSearch.toString(), 1500);
 
   const [params, setParams] = useState<ProductsListParams>({});
-  const { data, isLoading: isListLoading } = productApi.useList(params);
+  const { data, isLoading: isListLoading } = productApi.useList<ProductsListParams>(params);
 
-  const handleSort = useCallback((value: string) => {
-    setSortBy(value);
+  const handleSort = (value: string) => {
     setParams((prev) => ({
       ...prev,
-      sort: value === 'newest' ? { createdOn: 'desc' } : { createdOn: 'asc' },
+      sort: value === 'Sort by newest' ? { createdOn: 'desc' } : { createdOn: 'asc' },
     }));
-  }, []);
+    setSortBy(value);
+  };
 
-  const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setValueToSearch(event.target.value);
-  }, []);
+  };
 
   useEffect(() => {
     if (inputFilterValueFrom !== ''
@@ -90,6 +84,13 @@ const Marketplace: NextPage = () => {
       }));
     }
   }, [inputFilterValueFrom, inputFilterValueTo]);
+
+  useEffect(() => {
+    setParams((prev) => ({
+      ...prev,
+      searchValue: debouncedValueToSearch,
+    }));
+  }, [debouncedValueToSearch]);
 
   return (
     <>
@@ -125,18 +126,20 @@ const Marketplace: NextPage = () => {
                 <Group>
                   <UnstyledButton
                     className={classes.switchButton}
-                    onClick={() => setSortBy(sortBy === 'newest' ? 'oldest' : 'newest')}
+                    onClick={() => handleSort(sortBy === 'Sort by newest' ? 'Sort by oldest' : 'Sort by newest')}
                   >
                     <IconArrowsDownUp size="16px" color="gray" />
                   </UnstyledButton>
                   <Select
+                    allowDeselect
                     className={classes.selectSort}
                     data={selectOptions}
-                    value={sortBy}
                     onChange={handleSort}
                     variant="unstyled"
                     rightSection={<IconChevronDown />}
                     rightSectionWidth={20}
+                    defaultValue="Sort by newest"
+                    value={sortBy}
                   />
                 </Group>
               </Flex>
@@ -179,7 +182,7 @@ const Marketplace: NextPage = () => {
         </Grid.Col>
       </Grid>
       <Pagination
-        total={Math.ceil(data?.items.length ?? 0 / ITEMS_PER_PAGE)}
+        total={Math.ceil((data?.items.length ?? 0) / ITEMS_PER_PAGE)}
         value={currentPage}
         onChange={(newPage) => setCurrentPage(newPage)}
         position="center"
