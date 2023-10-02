@@ -4,6 +4,7 @@ import queryClient from 'query-client';
 import { apiService } from 'services';
 
 import { userTypes } from 'resources/user';
+import { User } from '../user/user.types';
 
 export function useSignIn<T>() {
   const signIn = (data: T) => apiService.post('/account/sign-in', data);
@@ -81,6 +82,26 @@ export function useRemoveAvatar() {
   return useMutation<userTypes.User>(removeAvatar, {
     onSuccess: (data) => {
       queryClient.setQueryData(['account'], data);
+    },
+  });
+}
+
+export function useAddProductToCart<T>() {
+  const addToCart = (data: T) => apiService.patch('/account/addToCart', data);
+
+  return useMutation<User, unknown, T>(addToCart, {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['account'], data._id);
+    },
+  });
+}
+
+export function useRemoveProductFromCart<T>() {
+  const removeFromCart = (data: T) => apiService.patch('/account/removeFromCart', data);
+
+  return useMutation<User, unknown, T>(removeFromCart, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['account']);
     },
   });
 }

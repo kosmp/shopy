@@ -1,6 +1,6 @@
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { userApi } from 'resources/user';
+import { accountApi } from 'resources/account';
 import { handleError } from 'utils';
 import { FC } from 'react';
 
@@ -9,7 +9,7 @@ interface RemoveButtonProps {
 }
 
 const RemoveButton: FC<RemoveButtonProps> = ({ productId }) => {
-  const { mutate: removeFromCart } = userApi.useRemoveProductFromCart();
+  const { mutate: removeFromCart } = accountApi.useRemoveProductFromCart();
 
   const handleRemove = () => {
     removeFromCart({ productId }, {

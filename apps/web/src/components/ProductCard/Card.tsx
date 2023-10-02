@@ -7,13 +7,13 @@ import {
 } from '@mantine/core';
 import { FC } from 'react';
 import { Product } from 'types';
-import { userApi } from 'resources/user';
+import { accountApi } from 'resources/account';
 import { useStyles } from './styles';
 import { handleError } from '../../utils';
 
 const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut }) => {
   const { classes } = useStyles();
-  const { mutate: addToCart } = userApi.useAddProductToCart();
+  const { mutate: addToCart } = accountApi.useAddProductToCart();
 
   const handleAddToCart = () => {
     addToCart({ productId: _id }, {

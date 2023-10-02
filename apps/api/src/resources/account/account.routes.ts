@@ -14,6 +14,8 @@ import verifyResetToken from './actions/verify-reset-token';
 import resendEmail from './actions/resend-email';
 import shadowLogin from './actions/shadow-login';
 import google from './actions/google';
+import addProductToCart from './actions/addProductToCart';
+import removeProductFromCart from './actions/removeProductFromCart';
 
 const publicRoutes = routeUtil.getRoutes([
   signUp,
@@ -32,6 +34,8 @@ const privateRoutes = routeUtil.getRoutes([
   update,
   uploadAvatar,
   removeAvatar,
+  addProductToCart,
+  removeProductFromCart,
 ]);
 
 const adminRoutes = routeUtil.getRoutes([
