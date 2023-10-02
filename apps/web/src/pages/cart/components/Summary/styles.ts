@@ -3,6 +3,7 @@ import { createStyles } from '@mantine/core';
 export const useStyles = createStyles(() => ({
   summaryCard: {
     padding: '20px',
+    minWidth: '315px',
   },
   summaryTitleText: {
     color: 'var(--Black-600, #201F22)',

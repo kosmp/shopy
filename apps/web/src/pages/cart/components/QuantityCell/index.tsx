@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
 
 interface QuantityCellProps {
-  maxValue: number
+  maxValue: number;
 }
 
 const QuantityCell: FC<QuantityCellProps> = ({ maxValue }) => {

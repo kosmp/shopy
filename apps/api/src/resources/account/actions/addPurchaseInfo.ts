@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { AppKoaContext, Next, AppRouter } from 'types';
 import { validateMiddleware } from 'middlewares';
 import { userService } from 'resources/user';
+import { productService } from '../../product';
 
 const schema = z.object({
   productId: z.string(),
@@ -24,18 +25,33 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const user = await userService.findOne({ _id: ctx.state.user._id });
 
   if (user && user.purchasedProducts.length !== undefined && productId) {
-    const foundIndex = user.purchasedProducts.findIndex((item) => item?.productId === productId);
+    const foundProduct = user.purchasedProducts.find((item) => item?.productId === productId);
+    const productIndex = user.purchasedProducts.findIndex((item) => item?.productId === productId);
 
-    if (foundIndex) {
-      user.purchasedProducts[foundIndex] = {
+
+    if (foundProduct) {
+      user.purchasedProducts[productIndex] = {
         productId: productId,
         purchaseDate: new Date(),
+        productName: foundProduct.productName,
+        productPrice: foundProduct.productPrice,
+        imageUrl: foundProduct.imageUrl,
       };
     } else {
-      user.purchasedProducts.push({
-        productId: productId,
-        purchaseDate: new Date(),
-      });
+      const product = await productService.findOne({ _id: productId });
+
+      if (product) {
+        user.purchasedProducts.push({
+          productId: productId,
+          purchaseDate: new Date(),
+          productName: product.productName,
+          productPrice: product.productPrice,
+          imageUrl: product.imageUrl,
+        });
+      } else {
+        ctx.status = 404;
+        ctx.body = { message: 'Product not found' };
+      }
     }
 
     const updatedUser = await userService.updateOne(

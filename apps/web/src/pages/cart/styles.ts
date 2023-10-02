@@ -32,9 +32,12 @@ export const useStyles = createStyles(() => ({
     },
   },
   leftTabMargin: {
-    marginRight: '16px'
+    marginRight: '16px',
   },
   rightTabMargin: {
-    marginLeft: '16px'
+    marginLeft: '16px',
+  },
+  mainCartBlockStack: {
+    width: '951px',
   },
 }));

@@ -1,8 +1,8 @@
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { accountApi } from 'resources/account';
-import { handleError } from 'utils';
 import { FC } from 'react';
+import { accountApi } from '../../../../resources/account';
+import { handleError } from '../../../../utils';
 
 interface RemoveButtonProps {
   productId: string;

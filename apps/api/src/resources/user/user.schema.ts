@@ -19,6 +19,9 @@ const schema = z.object({
   purchasedProducts: z.array(z.object({
     productId: z.string(),
     purchaseDate: z.date(),
+    productName: z.string(),
+    productPrice: z.number(),
+    imageUrl: z.string(),
   }).optional()),
 
   createdOn: z.date().optional(),

@@ -1,6 +1,9 @@
 export interface PurchaseInfo {
   productId: string,
-  purchasedDate: Date,
+  productName: string,
+  productPrice: number,
+  purchaseDate: Date,
+  imageUrl: string,
 }
 
 export interface User {
