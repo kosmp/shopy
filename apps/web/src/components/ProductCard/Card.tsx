@@ -13,10 +13,10 @@ import { handleError } from '../../utils';
 
 const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut }) => {
   const { classes } = useStyles();
-  const { mutate: update } = userApi.useUpdateProductsInCart();
+  const { mutate: addToCart } = userApi.useAddProductToCart();
 
   const handleAddToCart = () => {
-    update({ productId: _id }, {
+    addToCart({ productId: _id }, {
       onError: (err) => handleError(err),
     });
   };

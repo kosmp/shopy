@@ -16,7 +16,7 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
 
   return (
     <Grid gutter="lg">
-      <Grid.Col span={2}>
+      <Grid.Col span={2} style={{ padding: 0 }}>
         <Link href={RoutePath.CreateProduct} className={classes.newProduct}>
           <Paper className={classes.newProduct}>
             <Stack spacing="12px" align="center">

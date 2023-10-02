@@ -122,7 +122,6 @@ const Create: NextPage = () => {
               if (inputValue.length <= 30) {
                 setTitle(inputValue);
               } else {
-                // Обрезаем текст до 30 символов
                 setTitle(inputValue.slice(0, 30));
               }
             }}

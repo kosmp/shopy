@@ -24,8 +24,9 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const user = await userService.findOne({ _id: ctx.state.user._id });
 
   if (user && user.productsInCart.length !== undefined && productId) {
-    if (!user.productsInCart.includes(productId)) {
-      user.productsInCart.push(productId);
+    const indexOfProductId = user.productsInCart.indexOf(productId);
+    if (indexOfProductId !== -1) {
+      user.productsInCart.splice(indexOfProductId, 1);
 
       const updatedUser = await userService.updateOne(
         { _id: ctx.state.user._id },
@@ -43,5 +44,5 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 }
 
 export default (router: AppRouter) => {
-  router.patch('/', validator, validateMiddleware(schema), handler);
+  router.patch('/removeFromCart', validator, validateMiddleware(schema), handler);
 };

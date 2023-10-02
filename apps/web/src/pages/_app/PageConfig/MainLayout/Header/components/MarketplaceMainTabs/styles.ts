@@ -16,6 +16,10 @@ export const useStyles = createStyles(() => ({
     cursor: 'pointer',
     transition: 'background-color 0.3s, color 0.3s, box-shadow 0.3s',
 
+    '&:focus': {
+      outline: 'none',
+    },
+
     '&:hover': {
       backgroundColor: 'var(--Black-100, #ECECEE)',
     },

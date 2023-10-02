@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { CellContext, ColumnDefTemplate, Row } from '@tanstack/react-table';
-import { useMantineTheme } from '@mantine/core';
+import { useStyles } from './styles';
 
 type RowData = {
   [key: string]: string | number | boolean | Record<string, any>;
@@ -15,17 +15,19 @@ interface TbodyProps {
 }
 
 const Tbody: FC<TbodyProps> = ({ rows, flexRender }) => {
-  const { colors } = useMantineTheme();
+  const { classes } = useStyles();
 
   return (
     <tbody>
       {rows.map((row) => (
         <tr
           key={row.id}
-          style={{ backgroundColor: colors.blue[0], fontWeight: '400' }}
         >
           {row.getVisibleCells().map((cell) => (
-            <td key={cell.id}>
+            <td
+              key={cell.id}
+              className={classes.cell}
+            >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </td>
           ))}
