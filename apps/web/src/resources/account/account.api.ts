@@ -90,8 +90,8 @@ export function useAddProductToCart<T>() {
   const addToCart = (data: T) => apiService.patch('/account/addToCart', data);
 
   return useMutation<User, unknown, T>(addToCart, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['account'], data._id);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['account']);
     },
   });
 }

@@ -1,4 +1,4 @@
-import { memo, FC, useState } from 'react';
+import { memo, FC, useState, useEffect } from 'react';
 import { RoutePath } from 'routes';
 import {
   Header as LayoutHeader,
@@ -11,14 +11,19 @@ import { accountApi } from 'resources/account';
 import { useStyles } from './styles';
 import MarketplaceMainTabs from './components/MarketplaceMainTabs';
 
-// import UserMenu from './components/UserMenu';
 import ShadowLoginBanner from './components/ShadowLoginBanner';
 import CartAndLogout from './components/CartAndLogout';
 
 const Header: FC = () => {
   const { classes } = useStyles();
   const { data: account } = accountApi.useGet();
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (account?.productsInCart?.length !== undefined) {
+      setCount(account?.productsInCart?.length);
+    }
+  }, [account]);
 
   if (!account) return null;
 
@@ -34,7 +39,7 @@ const Header: FC = () => {
           <Text className={classes.logoText}>Shopy</Text>
         </Link>
         <MarketplaceMainTabs />
-        <CartAndLogout cartItemCount={cartItemCount} />
+        <CartAndLogout cartItemCount={count} />
       </Container>
     </LayoutHeader>
   );
