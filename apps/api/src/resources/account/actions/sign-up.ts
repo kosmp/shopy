@@ -54,6 +54,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     isEmailVerified: false,
     signupToken,
     productsInCart: [],
+    purchasedProducts: [],
   });
 
   await emailService.sendTemplate<Template.VERIFY_EMAIL>({

@@ -16,6 +16,7 @@ import shadowLogin from './actions/shadow-login';
 import google from './actions/google';
 import addProductToCart from './actions/addProductToCart';
 import removeProductFromCart from './actions/removeProductFromCart';
+import addPurchaseInfo from './actions/addPurchaseInfo';
 
 const publicRoutes = routeUtil.getRoutes([
   signUp,
@@ -36,6 +37,7 @@ const privateRoutes = routeUtil.getRoutes([
   removeAvatar,
   addProductToCart,
   removeProductFromCart,
+  addPurchaseInfo,
 ]);
 
 const adminRoutes = routeUtil.getRoutes([

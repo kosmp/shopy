@@ -1,3 +1,8 @@
+export interface PurchaseInfo {
+  productId: string,
+  purchasedDate: Date,
+}
+
 export interface User {
   _id: string;
   createdOn?: Date;
@@ -17,5 +22,6 @@ export interface User {
   oauth?: {
     google: boolean
   };
-  productsInCart: Array<string>
+  productsInCart: Array<string>;
+  purchasedProducts: Array<PurchaseInfo>;
 }
