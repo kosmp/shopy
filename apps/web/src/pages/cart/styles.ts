@@ -40,4 +40,17 @@ export const useStyles = createStyles(() => ({
   mainCartBlockStack: {
     width: '951px',
   },
+  firstColumnMyCart: {
+    width: '519px',
+  },
+  firstColumnHistory: {
+    width: '663px',
+  },
+  otherColumns: {
+    width: '144px',
+    textAlign: 'right',
+  },
+  headersText: {
+    color: 'var(--Black-400, #767676)',
+  },
 }));

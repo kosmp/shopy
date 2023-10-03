@@ -1,103 +1,14 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { Container, Group, Skeleton, Image, Stack, Tabs, Text } from '@mantine/core';
+import { Container, Skeleton, Stack, Flex, Tabs, Text } from '@mantine/core';
 import { productApi, productTypes } from 'resources/product';
 import { accountApi } from 'resources/account';
-import { ColumnDef } from '@tanstack/react-table';
+import { HistoryColumnsData } from './types';
 import { useStyles } from './styles';
+import { getHistoryColumns, getMyCartColumns } from './components/CartProductsTable/utils';
 import Summary from './components/Summary';
 import CartProductsTable from './components/CartProductsTable';
-import QuantityCell from './components/QuantityCell';
-import RemoveButton from './components/RemoveButton';
-
-interface HistoryData {
-  productName: string,
-  productPrice: number,
-  purchaseDate: Date,
-  imageUrl: string,
-}
-
-const myCartColumns: ColumnDef<productTypes.Product>[] = [
-  {
-    accessorKey: 'imageAndProductName',
-    header: 'Item',
-    cell: (info) => (
-      <Group spacing="25px">
-        <Image
-          width="80"
-          height="80"
-          radius="8px"
-          src={info.row.original.imageUrl}
-          alt={info.row.original.productName}
-        />
-        <Text size="16px" fw={700}>
-          {info.row.original.productName}
-        </Text>
-      </Group>
-    ),
-  },
-  {
-    accessorKey: 'productPrice',
-    header: 'Unit Price',
-    cell: (info) => (
-      <Text>
-        $
-        {info.row.original.productPrice}
-      </Text>
-    ),
-  },
-  {
-    accessorKey: 'quantity',
-    header: 'Quantity',
-    cell: (info) => <QuantityCell maxValue={info.row.original.productCount} />,
-  },
-  {
-    accessorKey: 'removeButton',
-    header: '',
-    cell: (info) => <RemoveButton productId={info.row.original._id} />,
-  },
-];
-
-const historyColumns: ColumnDef<HistoryData>[] = [
-  {
-    accessorKey: 'imageAndProductName',
-    header: 'Item',
-    cell: (info) => (
-      <Group spacing="25px">
-        <Image
-          width="80"
-          height="80"
-          radius="8px"
-          src={info.row.original.imageUrl}
-          alt={info.row.original.productName}
-        />
-        <Text size="16px" fw={700}>
-          {info.row.original.productName}
-        </Text>
-      </Group>
-    ),
-  },
-  {
-    accessorKey: 'productPrice',
-    header: 'Unit Price',
-    cell: (info) => (
-      <Text>
-        $
-        {info.row.original.productPrice}
-      </Text>
-    ),
-  },
-  {
-    accessorKey: '',
-    header: 'Date',
-    cell: (info) => (
-      <Text>
-        {info.row.original.purchaseDate?.toDateString()}
-      </Text>
-    ),
-  },
-];
 
 const Cart: NextPage = () => {
   const { classes } = useStyles();
@@ -105,13 +16,18 @@ const Cart: NextPage = () => {
   const [currentTabValue, setCurrentTabValue] = useState('my cart');
   const { data: allProducts, isLoading: isListLoading } = productApi.useList({});
   const { data: currentUser } = accountApi.useGet();
-  const [data, setData] = useState<Array<HistoryData | productTypes.Product>>([]);
+  const [data, setData] = useState<Array<HistoryColumnsData | productTypes.Product>>([]);
+  const [oneProductTotalPrice, setOneProductTotalPrice] = useState<number>(0);
+
+  useEffect(() => {
+
+  }, [oneProductTotalPrice]);
 
   useEffect(() => {
     if (currentUser !== undefined && allProducts !== undefined) {
       if (currentTabValue === 'history') {
-        const purchasedProductsByUser: HistoryData[] = currentUser.purchasedProducts.reduce(
-          (result: Array<HistoryData>, item) => {
+        const purchasedProductsByUser: HistoryColumnsData[] = currentUser.purchasedProducts.reduce(
+          (result: Array<HistoryColumnsData>, item) => {
             result.push({
               purchaseDate: item.purchaseDate,
               productName: item.productName,
@@ -135,7 +51,7 @@ const Cart: NextPage = () => {
       <Head>
         <title>Marketplace</title>
       </Head>
-      <Group spacing="78px">
+      <Flex direction="row" align="flex-start" gap="78px">
         <Stack spacing="20px" className={classes.mainCartBlockStack}>
           <Tabs defaultValue="my cart" variant="pills" activateTabWithKeyboard onTabChange={(value: string) => setCurrentTabValue(value)}>
             <Tabs.List>
@@ -157,7 +73,7 @@ const Cart: NextPage = () => {
           )}
           {data.length ? (
             <CartProductsTable
-              columns={currentTabValue === 'my cart' ? myCartColumns : historyColumns}
+              columns={currentTabValue === 'my cart' ? getMyCartColumns(setOneProductTotalPrice, classes) : getHistoryColumns(classes)}
               data={data}
             />
           ) : (
@@ -169,7 +85,7 @@ const Cart: NextPage = () => {
           )}
         </Stack>
         {currentTabValue === 'my cart' && <Summary totalPrice={totalPrice} />}
-      </Group>
+      </Flex>
     </>
   );
 };
