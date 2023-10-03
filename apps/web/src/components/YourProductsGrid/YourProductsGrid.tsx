@@ -16,9 +16,9 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
 
   return (
     <Grid gutter="lg">
-      <Grid.Col span={2} style={{ padding: 0 }}>
-        <Link href={RoutePath.CreateProduct} className={classes.newProduct}>
-          <Paper className={classes.newProduct}>
+      <Grid.Col span={2}>
+        <Link href={RoutePath.CreateProduct} className={classes.emptyArrayNewCard}>
+          <Paper className={products.length === 0 ? classes.emptyArrayNewCard : classes.notEmptyArrayNewCard}>
             <Stack spacing="12px" align="center">
               <ThemeIcon radius="xl" size="40px">
                 <IconPlus />

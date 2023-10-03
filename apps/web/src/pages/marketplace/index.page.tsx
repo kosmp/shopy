@@ -57,15 +57,19 @@ const Marketplace: NextPage = () => {
   const { data, isLoading: isListLoading } = productApi.useList<ProductsListParams>(params);
 
   const handleSort = (value: string) => {
-    setParams((prev) => ({
-      ...prev,
-      sort: value === 'Sort by newest' ? { createdOn: 'desc' } : { createdOn: 'asc' },
-    }));
-    setSortBy(value);
+    if (value !== null) {
+      setParams((prev) => ({
+        ...prev,
+        sort: value === 'Sort by newest' ? { createdOn: 'desc' } : { createdOn: 'asc' },
+      }));
+      setSortBy(value);
+    }
   };
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setValueToSearch(event.target.value);
+    if (event.target.value.length <= 30) {
+      setValueToSearch(event.target.value);
+    }
   };
 
   useEffect(() => {
@@ -123,7 +127,7 @@ const Marketplace: NextPage = () => {
                   {' '}
                   Results
                 </Text>
-                <Group>
+                <Group spacing="6px">
                   <UnstyledButton
                     className={classes.switchButton}
                     onClick={() => handleSort(sortBy === 'Sort by newest' ? 'Sort by oldest' : 'Sort by newest')}
@@ -136,7 +140,7 @@ const Marketplace: NextPage = () => {
                     data={selectOptions}
                     onChange={handleSort}
                     variant="unstyled"
-                    rightSection={<IconChevronDown />}
+                    rightSection={<IconChevronDown className={classes.iconChevronDownIcon} />}
                     rightSectionWidth={20}
                     defaultValue="Sort by newest"
                     value={sortBy}

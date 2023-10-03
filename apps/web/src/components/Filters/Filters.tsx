@@ -1,6 +1,6 @@
 import { Flex, NumberInput, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { FC, useEffect, useState } from 'react';
+import { Dispatch, FC, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 import { FilterProps } from 'types';
 import { useStyles } from './styles';
@@ -20,7 +20,7 @@ const Filters: FC<FilterProps> = ({
   useEffect(() => {
     handleInputChangeFrom(debouncedFrom);
     handleInputChangeTo(debouncedTo);
-  }, [debouncedFrom, debouncedTo]);
+  }, [debouncedFrom, debouncedTo, handleInputChangeFrom, handleInputChangeTo]);
 
   useEffect(() => {
     setPriceValueFrom(inputValueFrom);
@@ -35,6 +35,23 @@ const Filters: FC<FilterProps> = ({
     setPriceValueTo('');
     handleInputChangeFrom('');
     handleInputChangeTo('');
+  };
+
+  const handleInput = (e: FormEvent<HTMLInputElement>, handler: Dispatch<SetStateAction<number | ''>>) => {
+    const inputElement = e.target as HTMLInputElement;
+    const inputValue = inputElement.value;
+
+    const numericValue = inputValue.replace(/[^0-9]/g, '');
+
+    inputElement.value = numericValue;
+
+    if (numericValue !== '' && numericValue.length <= 8) {
+      handler(Number(numericValue));
+    } else if (numericValue !== '' && numericValue.length > 8) {
+      handler(0);
+    } else {
+      handler('');
+    }
   };
 
   return (
@@ -60,30 +77,14 @@ const Filters: FC<FilterProps> = ({
               placeholder="From:"
               radius="8px"
               value={priceValueFrom}
-              onInput={(e) => {
-                const inputElement = e.target as HTMLInputElement;
-                const inputValue = inputElement.value;
-
-                const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-                inputElement.value = numericValue;
-                setPriceValueFrom(numericValue === '' ? '' : Number(numericValue));
-              }}
+              onInput={(e) => handleInput(e, setPriceValueFrom)}
             />
             <NumberInput
               hideControls
               placeholder="To:"
               radius="8px"
               value={priceValueTo}
-              onInput={(e) => {
-                const inputElement = e.target as HTMLInputElement;
-                const inputValue = inputElement.value;
-
-                const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-                inputElement.value = numericValue;
-                setPriceValueTo(numericValue === '' ? '' : Number(numericValue));
-              }}
+              onInput={(e) => handleInput(e, setPriceValueTo)}
             />
           </Flex>
         </Stack>

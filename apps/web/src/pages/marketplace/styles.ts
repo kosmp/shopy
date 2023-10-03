@@ -21,4 +21,7 @@ export const useStyles = createStyles(() => ({
   pagination: {
     marginTop: '31px',
   },
+  iconChevronDownIcon: {
+    marginLeft: '6px',
+  },
 }));
