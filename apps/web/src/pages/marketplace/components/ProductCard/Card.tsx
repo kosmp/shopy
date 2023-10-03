@@ -8,8 +8,8 @@ import {
 import { FC } from 'react';
 import { Product } from 'types';
 import { accountApi } from 'resources/account';
+import { handleError } from 'utils';
 import { useStyles } from './styles';
-import { handleError } from '../../utils';
 
 const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut }) => {
   const { classes } = useStyles();

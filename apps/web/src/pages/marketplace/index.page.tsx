@@ -16,10 +16,9 @@ import { IconArrowsDownUp, IconChevronDown } from '@tabler/icons-react';
 import { Search } from 'public/images';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { Products, Filters } from 'components';
 import { useDebouncedValue } from '@mantine/hooks';
-import ActiveFilterPill from 'components/ActiveFilterPill/ActiveFilterPill';
 import { productApi } from 'resources/product';
+import { Products, Filters, ActiveFilterPill } from './components';
 import { useStyles } from './styles';
 
 const selectOptions = [

@@ -2,7 +2,7 @@ import { Flex, NumberInput, Paper, Stack, Text, UnstyledButton } from '@mantine/
 import { IconX } from '@tabler/icons-react';
 import { Dispatch, FC, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
-import { FilterProps } from 'types';
+import { FilterProps } from '../../types';
 import { useStyles } from './styles';
 
 const Filters: FC<FilterProps> = ({

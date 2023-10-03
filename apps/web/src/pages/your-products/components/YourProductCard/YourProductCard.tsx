@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { Product } from 'types';
 import { Group, Image, Paper, Stack, Text, UnstyledButton, Badge, Box } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
+import { Product } from 'types';
+import { productApi } from 'resources/product';
 import { useStyles } from './styles';
-import { productApi } from '../../resources/product';
 
 const Card : FC<Product> = ({ imageUrl, productName, productPrice, _id, soldOut }) => {
   const { classes } = useStyles();

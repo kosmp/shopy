@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { Stack, Text } from '@mantine/core';
-import { YourProductsGrid } from 'components';
 import { productApi } from 'resources/product';
+import { YourProductsGrid } from './components';
 import { useStyles } from './styles';
 
 const YourProducts: NextPage = () => {
