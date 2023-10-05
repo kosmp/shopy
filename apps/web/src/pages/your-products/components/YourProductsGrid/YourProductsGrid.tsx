@@ -34,6 +34,7 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
         <Grid.Col span={2} key={product._id}>
           <YourProductCard
             _id={product._id}
+            priceId={product.priceId}
             productName={product.productName}
             productPrice={product.productPrice}
             imageUrl={product.imageUrl}

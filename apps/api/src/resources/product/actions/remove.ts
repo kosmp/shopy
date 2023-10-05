@@ -1,6 +1,12 @@
 import { AppKoaContext, AppRouter, Next } from 'types';
 import { productService } from 'resources/product';
 import { cloudStorageService } from 'services';
+import Stripe from 'stripe';
+import config from 'config';
+
+const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
+  apiVersion: '2023-08-16',
+});
 
 type ValidatedData = never;
 type Request = {
@@ -21,6 +27,10 @@ async function handler(ctx: AppKoaContext<ValidatedData, Request>) {
   const deletedProduct = await productService.deleteOne({ _id: ctx.request.params.id });
 
   if (deletedProduct) {
+    await stripe.products.update(deletedProduct._id, {
+      active: false,
+    });
+
     await cloudStorageService.uploader.destroy(deletedProduct.imagePublicId, (error) => {
       if (error) {
         ctx.status = 500;

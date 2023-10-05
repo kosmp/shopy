@@ -174,6 +174,9 @@ importers:
       socket.io:
         specifier: 4.6.1
         version: 4.6.1
+      stripe:
+        specifier: 13.8.0
+        version: 13.8.0
       winston:
         specifier: 3.8.2
         version: 3.8.2
@@ -11297,6 +11300,17 @@ packages:
       ms: 2.0.0
     dev: true
 
+  /debug@3.2.7:
+    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.3
+    dev: true
+
   /debug@3.2.7(supports-color@5.5.0):
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -12148,7 +12162,7 @@ packages:
   /eslint-import-resolver-node@0.3.7:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
     dependencies:
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
       is-core-module: 2.11.0
       resolve: 1.22.1
     transitivePeerDependencies:
@@ -12197,7 +12211,7 @@ packages:
         optional: true
     dependencies:
       '@typescript-eslint/parser': 5.54.1(eslint@8.36.0)(typescript@4.9.5)
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.7
       eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.27.5)(eslint@8.36.0)
@@ -12219,7 +12233,7 @@ packages:
       array-includes: 3.1.6
       array.prototype.flat: 1.3.1
       array.prototype.flatmap: 1.3.1
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
       doctrine: 2.1.0
       eslint: 8.36.0
       eslint-import-resolver-node: 0.3.7
@@ -19894,6 +19908,14 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /stripe@13.8.0:
+    resolution: {integrity: sha512-QFOOeaEwNOAj4k/T9OtSb9sKx9oLVI5y9HrJJn3XN9RJYKGAuE+fMD+rHA5u9ILmf3FDx99jaEvVvykftJtBGA==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 20.3.1
+      qs: 6.11.0
+    dev: false
+
   /strnum@1.0.5:
     resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
 
@@ -21391,7 +21413,7 @@ packages:
   /webpack-virtual-modules@0.2.2:
     resolution: {integrity: sha512-kDUmfm3BZrei0y+1NTHJInejzxfhtU8eDj2M7OKb2IWrPFAeO1SOH2KuQ68MSZu9IGEHcxbkKKR1v18FrUSOmA==}
     dependencies:
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
     transitivePeerDependencies:
       - supports-color
     dev: true

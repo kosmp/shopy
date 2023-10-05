@@ -4,3 +4,10 @@ export interface HistoryColumnsData {
   purchaseDate: Date,
   imageUrl: string,
 }
+
+export interface CheckOutData {
+  productId: string,
+  priceId: string,
+  productPrice: number,
+  pickedQuantity: number,
+}

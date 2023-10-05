@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Group, Image, Text } from '@mantine/core';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { productTypes } from 'resources/product';
 import { HistoryColumnsData } from '../../types';
 import QuantityCell from '../QuantityCell';
@@ -68,7 +68,9 @@ export const getHistoryColumns = (styles: Record<string, string>) => {
   return historyColumns;
 };
 
-export const getMyCartColumns = (handler : Dispatch<SetStateAction<number>>, styles: Record<string, string>) => {
+export const getMyCartColumns = (
+  styles: Record<string, string>,
+) => {
   const myCartColumns: ColumnDef<productTypes.Product>[] = [
     {
       accessorKey: 'imageAndProductName',
@@ -111,7 +113,7 @@ export const getMyCartColumns = (handler : Dispatch<SetStateAction<number>>, sty
       ),
     },
     {
-      accessorKey: 'quantity',
+      accessorKey: 'pickedQuantity',
       header: (
         () => (
           <Text align="right" className={styles.headersText}>
@@ -121,7 +123,8 @@ export const getMyCartColumns = (handler : Dispatch<SetStateAction<number>>, sty
       ),
       cell: (info) => (
         <QuantityCell
-          setOneProductTotalPrice={handler}
+          productId={info.row.original._id}
+          priceId={info.row.original.priceId}
           productPrice={info.row.original.productPrice}
           maxValue={info.row.original.productCount}
         />

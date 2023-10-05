@@ -23,6 +23,7 @@ const Products : FC<ProductsProps> = ({ data, currentPage, itemsPerPage }) => {
             _id={product._id}
             productName={product.productName}
             productPrice={product.productPrice}
+            priceId={product.priceId}
             imageUrl={product.imageUrl}
             soldOut={product.soldOut}
           />

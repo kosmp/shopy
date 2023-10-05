@@ -1,28 +1,43 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
+import { useLocalStorage } from '@mantine/hooks';
 import { useStyles } from '../../styles';
 
 interface QuantityCellProps {
   maxValue: number;
-  setOneProductTotalPrice: Dispatch<SetStateAction<number>>;
+  priceId: string;
   productPrice: number;
+  productId: string;
 }
 
-const QuantityCell: FC<QuantityCellProps> = ({ maxValue, setOneProductTotalPrice, productPrice }) => {
+const QuantityCell: FC<QuantityCellProps> = ({ maxValue, priceId, productPrice, productId }) => {
   const { classes } = useStyles();
-  const [value, setValue] = useState<number>(1);
+  const [checkoutData, setCheckoutData] = useLocalStorage<{ productId: string, priceId: string, pickedQuantity: number, productPrice: number }[]>({ key: 'checkout_data', defaultValue: [], getInitialValueInEffect: false });
+  const [value, setValue] = useState<number>(checkoutData?.find((cartProduct: any) => cartProduct.productId === productId)?.pickedQuantity ?? 1);
 
   const handleDecrement = () => {
     if (value > 1) {
+      const foundIndex = checkoutData.findIndex((cartProduct: any) => cartProduct.productId === productId);
+      if (foundIndex >= 0) {
+        checkoutData[foundIndex].pickedQuantity -= 1;
+        setCheckoutData(checkoutData);
+      } else {
+        setCheckoutData([...checkoutData, { productId, productPrice, priceId, pickedQuantity: value - 1 }]);
+      }
       setValue(value - 1);
-      setOneProductTotalPrice(value * productPrice);
     }
   };
 
   const handleIncrement = () => {
     if (value < maxValue) {
+      const foundIndex = checkoutData.findIndex((cartProduct: any) => cartProduct.productId === productId);
+      if (foundIndex >= 0) {
+        checkoutData[foundIndex].pickedQuantity += 1;
+        setCheckoutData(checkoutData);
+      } else {
+        setCheckoutData([...checkoutData, { productId, productPrice, priceId, pickedQuantity: value + 1 }]);
+      }
       setValue(value + 1);
-      setOneProductTotalPrice(value * productPrice);
     }
   };
 

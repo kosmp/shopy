@@ -5,6 +5,7 @@ export interface Product {
   imageUrl: string;
   productName: string;
   productPrice: number;
+  priceId: string;
   soldOut: boolean;
   productCount: number;
 }

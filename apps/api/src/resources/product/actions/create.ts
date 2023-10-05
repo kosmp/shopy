@@ -4,6 +4,12 @@ import { validateMiddleware } from 'middlewares';
 import { z } from 'zod';
 import { cloudStorageService } from 'services';
 import multer from '@koa/multer';
+import Stripe from 'stripe';
+import config from 'config';
+
+const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
+  apiVersion: '2023-08-16',
+});
 
 const uploader = multer();
 
@@ -50,7 +56,37 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     });
 
     if (res) {
+      const product = await stripe.products.create({
+        name: productName,
+        active: !soldOut,
+        images: [ res.secure_url ],
+      });
+
+      const price = await stripe.prices.create({
+        unit_amount: Number(productPrice + '00'),
+        currency: 'usd',
+        product: product.id,
+      });
+
+      if (!product || !price) {
+        ctx.status = 500;
+        ctx.body = { error: 'The product was not created in stripe' };
+      }
+
+      await productService.insertOne({
+        _id: product.id,
+        imageUrl: res.secure_url,
+        imagePublicId: res.public_id,
+        productName,
+        productPrice: Number(productPrice),
+        priceId: price.id,
+        productCount: Number(productCount),
+        soldOut: soldOut === 'true',
+        createdBy: ctx.state.user._id,
+      });
+
       ctx.body = {
+        priceId: price.id,
         imageUrl: res.secure_url,
         imagePublicId: res.public_id,
         productName,
@@ -59,16 +95,6 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
         soldOut: soldOut === 'true',
         createdBy: ctx.state.user._id,
       };
-
-      await productService.insertOne({
-        imageUrl: res.secure_url,
-        imagePublicId: res.public_id,
-        productName,
-        productPrice: Number(productPrice),
-        productCount: Number(productCount),
-        soldOut: soldOut === 'true',
-        createdBy: ctx.state.user._id,
-      });
     } else {
       ctx.status = 500;
       ctx.body = { error: 'No result received from cloud storage' };

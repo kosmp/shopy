@@ -1,13 +1,24 @@
 import { FC } from 'react';
 import { Paper, Stack, Text, Group, Divider, Button } from '@mantine/core';
+import { stripeApi } from 'resources/stripe';
 import { useStyles } from './styles';
 
 interface SummaryProps {
   totalPrice: number
+  checkoutData: {
+    priceId: string,
+    productPrice: number,
+    pickedQuantity: number,
+  }[]
 }
 
-const Summary: FC<SummaryProps> = ({ totalPrice }) => {
+const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
   const { classes } = useStyles();
+  const { mutate: createSession } = stripeApi.useCreateSession();
+
+  const handleSubmit = () => {
+    createSession(checkoutData);
+  };
 
   return (
     <Paper className={classes.summaryCard}>
@@ -21,7 +32,7 @@ const Summary: FC<SummaryProps> = ({ totalPrice }) => {
             {totalPrice}
           </Text>
         </Group>
-        <Button>Proceed to Checkout</Button>
+        <Button onSubmit={handleSubmit} type="submit">Proceed to Checkout</Button>
       </Stack>
     </Paper>
   );
