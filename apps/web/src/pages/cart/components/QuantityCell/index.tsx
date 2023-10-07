@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import { useStyles } from '../../styles';

@@ -59,7 +59,7 @@ export const getHistoryColumns = (styles: Record<string, string>) => {
       ),
       cell: (info) => (
         <Text className={styles.otherColumns}>
-          {info.row.original.purchaseDate?.toDateString()}
+          {new Date(info.row.original.purchaseDate).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}
         </Text>
       ),
     },
@@ -82,7 +82,7 @@ export const getMyCartColumns = (
         )
       ),
       cell: (info) => (
-        <Group spacing="25px" className={styles.firstColumn}>
+        <Group spacing="25px" className={styles.firstColumnMyCart}>
           <Image
             width="80"
             height="80"

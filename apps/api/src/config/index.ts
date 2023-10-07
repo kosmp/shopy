@@ -23,6 +23,7 @@ const schema = z.object({
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   STRIPE_SECRET_KEY: z.string(),
+  STRIPE_ENDPOINT_SECRET: z.string(),
 });
 
 type Config = z.infer<typeof schema>;

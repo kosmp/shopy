@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { Container, Skeleton, Stack, Flex, Tabs, Text, Group } from '@mantine/core';
+import { Skeleton, Stack, Tabs, Group } from '@mantine/core';
 import { productApi, productTypes } from 'resources/product';
 import { accountApi } from 'resources/account';
 import { useLocalStorage } from '@mantine/hooks';
@@ -10,6 +10,8 @@ import { useStyles } from './styles';
 import { getHistoryColumns, getMyCartColumns } from './components/CartProductsTable/utils';
 import Summary from './components/Summary';
 import CartProductsTable from './components/CartProductsTable';
+import { paymentApi } from '../../resources/payment';
+import EmptyStateCard from './components/EmptyStateCard';
 
 interface CheckOutData {
   priceId: string,
@@ -24,8 +26,33 @@ const Cart: NextPage = () => {
   const [currentTabValue, setCurrentTabValue] = useState('my cart');
   const { data: allProducts, isLoading: isListLoading } = productApi.useList({});
   const { data: currentUser } = accountApi.useGet();
-  const [data, setData] = useState<Array<HistoryColumnsData | productTypes.Product>>([]);
-  const [checkoutData, setCheckoutData] = useLocalStorage<CheckOutData[]>({ key: 'checkout_data', defaultValue: [], getInitialValueInEffect: false });
+  const [myCartData, setMyCartData] = useState<Array<productTypes.Product>>([]);
+  const [checkoutData] = useLocalStorage<CheckOutData[]>({ key: 'checkout_data', defaultValue: [], getInitialValueInEffect: false });
+  const { data: historyData } = paymentApi.useGetPaymentHistory();
+  const [resultHistoryData, setResultHistoryData] = useState<Array<HistoryColumnsData>>([]);
+
+  const handleHistoryData = (): HistoryColumnsData[] => {
+    const result: HistoryColumnsData[] = [];
+
+    if (historyData) {
+      historyData?.forEach((historyItem) => {
+        historyItem?.productList.forEach((productListItem) => {
+          const matchingProduct = allProducts?.items.find((product) => product.priceId === productListItem.priceId);
+
+          if (matchingProduct) {
+            result.push({
+              imageUrl: matchingProduct.imageUrl,
+              productName: matchingProduct.productName,
+              productPrice: matchingProduct.productPrice,
+              purchaseDate: historyItem.createdDate,
+            });
+          }
+        });
+      });
+    }
+
+    return result;
+  };
 
   useEffect(() => {
     setTotalPrice(checkoutData.reduce((result, item) => (result + item.pickedQuantity * item.productPrice), 0));
@@ -34,33 +61,34 @@ const Cart: NextPage = () => {
   useEffect(() => {
     if (currentUser !== undefined && allProducts !== undefined) {
       if (currentTabValue === 'history') {
-        const purchasedProductsByUser: HistoryColumnsData[] = currentUser.purchasedProducts.reduce(
-          (result: Array<HistoryColumnsData>, item) => {
-            result.push({
-              purchaseDate: item.purchaseDate,
-              productName: item.productName,
-              productPrice: item.productPrice,
-              imageUrl: item.imageUrl,
-            });
-
-            return result;
-          },
-          [],
-        );
-        setData(purchasedProductsByUser ?? []);
+        // const purchasedProductsByUser: HistoryColumnsData[] = currentUser.purchasedProducts.reduce(
+        //   (result: Array<HistoryColumnsData>, item) => {
+        //     result.push({
+        //       purchaseDate: item.purchaseDate,
+        //       productName: item.productName,
+        //       productPrice: item.productPrice,
+        //       imageUrl: item.imageUrl,
+        //     });
+        //
+        //     return result;
+        //   },
+        //   [],
+        // );
+        // setMyCartData(purchasedProductsByUser ?? []);
+        setResultHistoryData(handleHistoryData());
       } else {
-        setData(allProducts.items.filter((item) => currentUser.productsInCart?.includes(item._id)));
+        setMyCartData(allProducts.items.filter((item) => currentUser.productsInCart?.includes(item._id)));
       }
     }
-  }, [currentTabValue, allProducts, currentUser]);
+  }, [currentTabValue, historyData, allProducts, currentUser]);
 
   return (
     <>
       <Head>
         <title>Marketplace</title>
       </Head>
-      <Group>
-        <Stack spacing="20px" className={classes.mainCartBlockStack}>
+      <Group spacing="78px" grow={((currentTabValue === 'my cart' && !myCartData.length) || (currentTabValue === 'history' && !resultHistoryData.length))}>
+        <Stack spacing="20px" className={((currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length)) ? classes.mainCartBlockStack : ''}>
           <Tabs defaultValue="my cart" variant="pills" activateTabWithKeyboard onTabChange={(value: string) => setCurrentTabValue(value)}>
             <Tabs.List>
               <Tabs.Tab value="my cart" className={`${classes.tab} ${classes.leftTabMargin}`}>My cart</Tabs.Tab>
@@ -79,20 +107,18 @@ const Cart: NextPage = () => {
             ))}
           </>
           )}
-          {data.length ? (
+          {(currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length) ? (
             <CartProductsTable
               columns={currentTabValue === 'my cart' ? getMyCartColumns(classes) : getHistoryColumns(classes)}
-              data={data}
+              data={currentTabValue === 'my cart' ? myCartData : resultHistoryData}
             />
           ) : (
-            <Container p={75}>
-              <Text size="xl" color="grey">
-                No results found, try to adjust your search.
-              </Text>
-            </Container>
+            <Group grow>
+              <EmptyStateCard />
+            </Group>
           )}
         </Stack>
-        {currentTabValue === 'my cart' && <Summary totalPrice={totalPrice} checkoutData={checkoutData} />}
+        {currentTabValue === 'my cart' && myCartData.length > 0 && <Summary totalPrice={totalPrice} checkoutData={checkoutData} />}
       </Group>
     </>
   );

@@ -5,6 +5,7 @@ import { securityUtil } from 'utils';
 import { validateMiddleware } from 'middlewares';
 import { AppKoaContext, Next, AppRouter, Template } from 'types';
 import { userService, User } from 'resources/user';
+import { stripeService } from 'services';
 
 import emailService from 'services/email/email.service';
 import { emailRegex, passwordRegex } from 'resources/account/account.constants';
@@ -49,6 +50,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     email,
     firstName,
     lastName,
+
     fullName: `${firstName} ${lastName}`,
     passwordHash: hash.toString(),
     isEmailVerified: false,
@@ -56,6 +58,8 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     productsInCart: [],
     purchasedProducts: [],
   });
+
+  await stripeService.createAndAttachStripeAccount(user);
 
   await emailService.sendTemplate<Template.VERIFY_EMAIL>({
     to: user.email,

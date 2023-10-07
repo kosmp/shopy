@@ -28,7 +28,7 @@ const CartProductsTable: FC<TableProps> = ({
   return (
     <TableContainer
       withBorder={false}
-      style={{ padding: 0 }}
+      p={0}
     >
       <Thead
         headerGroups={table.getHeaderGroups()}

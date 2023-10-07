@@ -8,6 +8,7 @@ const schema = z.object({
   fullName: z.string(),
   email: z.string(),
   passwordHash: z.string().nullable().optional(),
+  stripeId: z.string().optional().nullable(),
   signupToken: z.string().nullable().optional(),
   resetPasswordToken: z.string().nullable().optional(),
   isEmailVerified: z.boolean().default(false),

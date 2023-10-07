@@ -58,7 +58,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
     if (res) {
       const product = await stripe.products.create({
         name: productName,
-        active: !soldOut,
+        active: true,
         images: [ res.secure_url ],
       });
 
@@ -70,7 +70,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 
       if (!product || !price) {
         ctx.status = 500;
-        ctx.body = { error: 'The product was not created in stripe' };
+        ctx.body = { error: 'The product was not created in checkout' };
       }
 
       await productService.insertOne({

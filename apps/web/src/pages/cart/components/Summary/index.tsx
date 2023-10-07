@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Paper, Stack, Text, Group, Divider, Button } from '@mantine/core';
-import { stripeApi } from 'resources/stripe';
+import { checkoutApi } from 'resources/checkout';
+import { useRouter } from 'next/router';
 import { useStyles } from './styles';
 
 interface SummaryProps {
@@ -9,15 +10,27 @@ interface SummaryProps {
     priceId: string,
     productPrice: number,
     pickedQuantity: number,
+    removed?: boolean
   }[]
 }
 
 const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
   const { classes } = useStyles();
-  const { mutate: createSession } = stripeApi.useCreateSession();
+  const { mutate: createSession } = checkoutApi.useCreateSession();
 
-  const handleSubmit = () => {
-    createSession(checkoutData);
+  const handleProceed = () => {
+    const updatedCheckoutData : {
+      price: string;
+      quantity: number;
+    }[] = checkoutData.map((item) => {
+      const { productPrice, removed, ...rest } = item;
+      return {
+        price: rest.priceId,
+        quantity: rest.pickedQuantity,
+      };
+    });
+
+    createSession(updatedCheckoutData);
   };
 
   return (
@@ -32,7 +45,7 @@ const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
             {totalPrice}
           </Text>
         </Group>
-        <Button onSubmit={handleSubmit} type="submit">Proceed to Checkout</Button>
+        <Button onClick={handleProceed} type="submit">Proceed to Checkout</Button>
       </Stack>
     </Paper>
   );
