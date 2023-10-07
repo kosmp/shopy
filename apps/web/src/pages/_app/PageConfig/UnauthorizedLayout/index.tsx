@@ -21,22 +21,23 @@ const UnauthorizedLayout: FC<UnauthorizedLayoutProps> = ({ children }) => {
         { maxWidth: 'sm', cols: 1, spacing: 'sm' },
       ]}
     >
+      <div className={classes.wrapper}>
+        <main className={classes.content}>
+          {children}
+        </main>
+      </div>
+
       <MediaQuery
         smallerThan="sm"
         styles={{ display: 'none' }}
       >
         <Image
           alt="app info"
-          src="../images/ship.svg"
+          src="../images/auth_image.png"
           height="100vh"
+          fit="scale-down"
         />
       </MediaQuery>
-
-      <div className={classes.wrapper}>
-        <main className={classes.content}>
-          {children}
-        </main>
-      </div>
     </SimpleGrid>
   );
 };

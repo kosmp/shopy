@@ -1,7 +1,6 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Paper, Stack, Text, Group, Divider, Button } from '@mantine/core';
 import { checkoutApi } from 'resources/checkout';
-import { useRouter } from 'next/router';
 import { useStyles } from './styles';
 
 interface SummaryProps {
@@ -17,8 +16,11 @@ interface SummaryProps {
 const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
   const { classes } = useStyles();
   const { mutate: createSession } = checkoutApi.useCreateSession();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleProceed = () => {
+    setLoading(true);
+
     const updatedCheckoutData : {
       price: string;
       quantity: number;
@@ -30,7 +32,7 @@ const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
       };
     });
 
-    createSession(updatedCheckoutData);
+    new Promise(() => { createSession(updatedCheckoutData); }).then(() => setLoading(false));
   };
 
   return (
@@ -45,7 +47,7 @@ const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
             {totalPrice}
           </Text>
         </Group>
-        <Button onClick={handleProceed} type="submit">Proceed to Checkout</Button>
+        <Button onClick={handleProceed} loading={loading}>Proceed to Checkout</Button>
       </Stack>
     </Paper>
   );

@@ -29,6 +29,7 @@ const Create: NextPage = () => {
   const [priceError, setPriceError] = useState<string>('');
   const [imageError, setImageError] = useState<string | null>(null);
   const [countError, setCountError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = (selectedFile: File | null) => {
     setImageError(null);
@@ -57,7 +58,7 @@ const Create: NextPage = () => {
     return false;
   };
 
-  const handleUploadProduct = async () => {
+  const handleUploadProduct = () => {
     setImageError(null);
 
     if (!title) {
@@ -78,6 +79,7 @@ const Create: NextPage = () => {
       return;
     }
 
+    setLoading(true);
     if (isFileFormatCorrect(imageFile) && isFileSizeCorrect(imageFile)) {
       const body = new FormData();
       body.append('file', imageFile, imageFile.name);
@@ -86,8 +88,11 @@ const Create: NextPage = () => {
       body.append('productCount', count);
       body.append('soldOut', String(false));
 
-      await uploadProduct(body, {
-        onSuccess: () => router.push('/your-products'),
+      uploadProduct(body, {
+        onSuccess: () => {
+          router.push('/your-products');
+          setLoading(false);
+        },
         onError: (err) => handleError(err),
       });
     }
@@ -182,7 +187,7 @@ const Create: NextPage = () => {
         </Stack>
       </Stack>
       <Box className={classes.buttonBox}>
-        <Button className={classes.uploadProductButton} onClick={handleUploadProduct}>
+        <Button className={classes.uploadProductButton} onClick={handleUploadProduct} loading={loading}>
           Upload Product
         </Button>
       </Box>

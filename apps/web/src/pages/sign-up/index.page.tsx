@@ -143,7 +143,7 @@ const SignUp: NextPage = () => {
         <title>Sign up</title>
       </Head>
       <Stack sx={{ width: '408px' }} spacing={20}>
-        <Stack spacing={34}>
+        <Stack spacing={32}>
           <Title order={1}>Sign Up</Title>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={20}>
@@ -192,27 +192,17 @@ const SignUp: NextPage = () => {
             </Button>
           </form>
         </Stack>
-        <Stack spacing={34}>
-          <Button
-            component="a"
-            leftIcon={<GoogleIcon />}
-            href={`${config.API_URL}/account/sign-in/google/auth`}
-            variant="outline"
+        <Group sx={{ fontSize: '16px', justifyContent: 'center' }} spacing={12}>
+          Have an account?
+          <Link
+            type="router"
+            href={RoutePath.SignIn}
+            inherit
+            underline={false}
           >
-            Continue with Google
-          </Button>
-          <Group sx={{ fontSize: '16px', justifyContent: 'center' }} spacing={12}>
-            Have an account?
-            <Link
-              type="router"
-              href={RoutePath.SignIn}
-              inherit
-              underline={false}
-            >
-              Sign In
-            </Link>
-          </Group>
-        </Stack>
+            Sign In
+          </Link>
+        </Group>
       </Stack>
     </>
   );
