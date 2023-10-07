@@ -42,12 +42,11 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 
       const purchaseList = (await stripe.checkout.sessions.listLineItems(sessionId)).data;
 
-      purchaseList.forEach((el) => console.log(el));
-      const priceIds = purchaseList.filter((purchaseItem) => purchaseItem.price?.id);
+      const priceIds = purchaseList.map((purchaseItem) => purchaseItem.price?.id).filter((priceId) => priceId !== undefined) as string[];
 
       const filter = { priceId: { $in: priceIds } };
 
-      await productService.updateMany({ filter }, (doc) => {
+      await productService.updateMany({ ...filter }, (doc) => {
         const purchasedCount = purchaseList.find((purchaseItem) => purchaseItem.price?.id === doc.priceId)?.quantity ?? 0;
 
         if (doc.productCount - purchasedCount === 0) {

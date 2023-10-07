@@ -3,8 +3,6 @@ import mount from 'koa-mount';
 import { AppKoa, AppRouter } from 'types';
 import { accountRoutes } from 'resources/account';
 import { productRoutes } from 'resources/product';
-import compose from 'koa-compose';
-import auth from './middlewares/auth.middleware';
 import { webhookRoutes } from '../resources/webhook';
 
 const healthCheckRouter = new AppRouter();
@@ -14,5 +12,5 @@ export default (app: AppKoa) => {
   app.use(healthCheckRouter.routes());
   app.use(mount('/account', accountRoutes.publicRoutes));
   app.use(mount('/products', productRoutes.publicRoutes));
-  app.use(mount('/webhook', compose([auth, webhookRoutes.publicRoutes])));
+  app.use(mount('/webhook',  webhookRoutes.publicRoutes));
 };
