@@ -1,3 +1,3 @@
-import Home from 'pages/home';
+import Marketplace from 'pages/marketplace';
 
-export default Home;
+export default Marketplace;

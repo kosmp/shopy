@@ -34,7 +34,7 @@ const Header: FC = () => {
         className={classes.headerContainer}
         fluid
       >
-        <Link underline={false} type="router" href={RoutePath.Home}>
+        <Link underline={false} type="router" href={RoutePath.Marketplace}>
           <LogoImage />
           <Text className={classes.logoText}>Shopy</Text>
         </Link>

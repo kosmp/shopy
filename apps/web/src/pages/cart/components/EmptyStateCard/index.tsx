@@ -16,7 +16,7 @@ const EmptyStateCard: FC = () => {
           You haven&apos;t made any purchases yet.
           Go to the marketplace and make purchases.
         </Text>
-        <a href="/marketplace">
+        <a href="/">
           <Button>
             Go to Marketplace
           </Button>

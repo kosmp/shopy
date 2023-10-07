@@ -11,10 +11,10 @@ const MarketplaceMainTabs: FC = () => {
   useEffect(() => {
     const currentRoute = router.pathname;
 
-    if (currentRoute.includes('/marketplace')) {
-      setActiveTab('marketplace');
-    } else if (currentRoute.includes('/your-products')) {
+    if (currentRoute.includes('/your-products')) {
       setActiveTab('your products');
+    } else if (currentRoute.includes('/')) {
+      setActiveTab('marketplace');
     } else {
       setActiveTab('');
     }
@@ -23,7 +23,7 @@ const MarketplaceMainTabs: FC = () => {
   const handleTabChange = (value: string) => {
     setActiveTab(value);
 
-    const newRoute = value === 'marketplace' ? '/marketplace' : '/your-products';
+    const newRoute = value === 'marketplace' ? '/' : '/your-products';
 
     router.push(newRoute);
   };

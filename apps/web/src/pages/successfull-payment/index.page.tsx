@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import PaymentResultCard from 'components/PaymentResultCard/PaymentResultCard';
+import { PaymentResultCard } from 'components';
 import { Group } from '@mantine/core';
 import { useStyles } from '../failed-payment/styles';
 
