@@ -17,7 +17,6 @@ interface CheckOutData {
   priceId: string,
   productPrice: number,
   pickedQuantity: number,
-  removed?: boolean
 }
 
 const Cart: NextPage = () => {
@@ -31,28 +30,28 @@ const Cart: NextPage = () => {
   const { data: historyData } = paymentApi.useGetPaymentHistory();
   const [resultHistoryData, setResultHistoryData] = useState<Array<HistoryColumnsData>>([]);
 
-  const handleHistoryData = (): HistoryColumnsData[] => {
-    const result: HistoryColumnsData[] = [];
-
-    if (historyData) {
-      historyData?.forEach((historyItem) => {
-        historyItem?.productList.forEach((productListItem) => {
-          const matchingProduct = allProducts?.items.find((product) => product.priceId === productListItem.priceId);
-
-          if (matchingProduct) {
-            result.push({
-              imageUrl: matchingProduct.imageUrl,
-              productName: matchingProduct.productName,
-              productPrice: matchingProduct.productPrice,
-              purchaseDate: historyItem.createdDate,
-            });
-          }
-        });
-      });
-    }
-
-    return result;
-  };
+  // const handleHistoryData = (): HistoryColumnsData[] => {
+  //   const result: HistoryColumnsData[] = [];
+  //
+  //   if (historyData) {
+  //     historyData?.forEach((historyItem) => {
+  //       historyItem?.productList.forEach((productListItem) => {
+  //         const matchingProduct = currentUser?.purchasedProducts.find((product) => product.priceId === productListItem.priceId);
+  //
+  //         if (matchingProduct) {
+  //           result.push({
+  //             imageUrl: matchingProduct.imageUrl,
+  //             productName: matchingProduct.productName,
+  //             productPrice: matchingProduct.productPrice,
+  //             purchaseDate: historyItem.createdDate,
+  //           });
+  //         }
+  //       });
+  //     });
+  //   }
+  //
+  //   return result;
+  // };
 
   useEffect(() => {
     setTotalPrice(checkoutData.reduce((result, item) => (result + item.pickedQuantity * item.productPrice), 0));
@@ -61,7 +60,14 @@ const Cart: NextPage = () => {
   useEffect(() => {
     if (currentUser !== undefined && allProducts !== undefined) {
       if (currentTabValue === 'history') {
-        setResultHistoryData(handleHistoryData());
+        const resultArray: HistoryColumnsData[] = historyData?.map((item) => ({
+          productName: item.productName,
+          productPrice: item.productPrice,
+          purchaseDate: item.purchaseDate,
+          imageUrl: item.imageUrl,
+        })) ?? [];
+
+        setResultHistoryData(resultArray);
       } else {
         setMyCartData(allProducts.items.filter((item) => currentUser.productsInCart?.includes(item._id)));
       }

@@ -2,6 +2,7 @@ export interface PurchaseInfo {
   productId: string,
   productName: string,
   productPrice: number,
+  priceId: string,
   purchaseDate: Date,
   imageUrl: string,
 }

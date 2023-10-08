@@ -22,6 +22,7 @@ const schema = z.object({
     purchaseDate: z.date(),
     productName: z.string(),
     productPrice: z.number(),
+    priceId: z.string(),
     imageUrl: z.string(),
   }).optional()),
 

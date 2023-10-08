@@ -105,13 +105,3 @@ export function useRemoveProductFromCart<T>() {
     },
   });
 }
-
-export function useAddPurchaseInfo<T>() {
-  const addPurchaseInfo = (data: T) => apiService.patch('/account/addPurchaseInfo', data);
-
-  return useMutation<User, unknown, T>(addPurchaseInfo, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(['account']);
-    },
-  });
-}

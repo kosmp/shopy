@@ -5,7 +5,6 @@ import { productService } from 'resources/product';
 import { userService } from 'resources/user';
 
 import { stripeService } from 'services';
-import * as console from 'console';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
   typescript: true,
@@ -14,6 +13,15 @@ const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
 
 interface ValidatedData {
   event: Stripe.Event;
+}
+
+interface PurchaseProduct {
+  productId: string,
+  purchaseDate: Date,
+  productName: string,
+  productPrice: number,
+  priceId: string,
+  imageUrl: string
 }
 
 async function validator(ctx: AppKoaContext, next: Next) {
@@ -71,12 +79,36 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       const userId = customerMetadata.userId;
 
       await userService.updateOne({ _id: userId }, (doc) => {
+
         const updatedProductsInCart = doc.productsInCart.filter((productId) => {
           return !cartElementsToDelete.some((idToDelete) => idToDelete === productId);
         });
-        console.log(updatedProductsInCart);
+
         return ({
           productsInCart: updatedProductsInCart,
+        });
+      });
+
+      const productsList: PurchaseProduct[] = [];
+
+      for (const el of purchaseList) {
+        const product = await productService.findOne({ priceId: el.price?.id });
+
+        if (product) {
+          productsList.push({
+            productId: product._id,
+            purchaseDate: new Date(),
+            productName: product.productName,
+            productPrice: product.productPrice,
+            priceId: product.priceId,
+            imageUrl: product.imageUrl,
+          });
+        }
+      }
+
+      await userService.updateOne({ _id: userId }, (doc) => {
+        return ({
+          purchasedProducts: [...doc.purchasedProducts, ...productsList],
         });
       });
   }

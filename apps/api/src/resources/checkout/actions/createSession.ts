@@ -5,7 +5,6 @@ import { AppKoaContext, AppRouter } from 'types';
 import { z } from 'zod';
 import { Next } from 'types';
 import { userService } from 'resources/user';
-import * as console from 'console';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
   typescript: true,
