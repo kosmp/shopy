@@ -17,6 +17,9 @@ const createAndAttachStripeAccount = async (user: User, session?: ClientSession)
     const customer = await stripe.customers.create({
       email: user.email,
       name: user.fullName,
+      metadata: {
+        userId: user._id,
+      },
     });
 
     await userService.atomic.updateOne(

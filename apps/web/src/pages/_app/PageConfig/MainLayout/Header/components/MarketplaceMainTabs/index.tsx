@@ -13,7 +13,7 @@ const MarketplaceMainTabs: FC = () => {
 
     if (currentRoute.includes('/your-products')) {
       setActiveTab('your products');
-    } else if (currentRoute.includes('/')) {
+    } else if (!currentRoute.includes('/cart')) {
       setActiveTab('marketplace');
     } else {
       setActiveTab('');

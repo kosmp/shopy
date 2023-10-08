@@ -2,8 +2,10 @@ import config from 'config';
 import Stripe from 'stripe';
 import { AppKoaContext, AppRouter, Next } from 'types';
 import { productService } from 'resources/product';
+import { userService } from 'resources/user';
 
 import { stripeService } from 'services';
+import * as console from 'console';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
   typescript: true,
@@ -41,15 +43,18 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       const sessionId = session.id;
 
       const purchaseList = (await stripe.checkout.sessions.listLineItems(sessionId)).data;
-
       const priceIds = purchaseList.map((purchaseItem) => purchaseItem.price?.id).filter((priceId) => priceId !== undefined) as string[];
 
       const filter = { priceId: { $in: priceIds } };
+
+      const cartElementsToDelete: string[] = [];
 
       await productService.updateMany({ ...filter }, (doc) => {
         const purchasedCount = purchaseList.find((purchaseItem) => purchaseItem.price?.id === doc.priceId)?.quantity ?? 0;
 
         if (doc.productCount - purchasedCount === 0) {
+          cartElementsToDelete.push(doc._id);
+
           return ({
             productCount: 0,
             soldOut: true,
@@ -58,6 +63,20 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
 
         return ({
           productCount: doc.productCount - purchasedCount,
+        });
+      });
+
+      const customer = await stripe.customers.retrieve(session.customer as string) as Stripe.Customer;
+      const customerMetadata = customer.metadata;
+      const userId = customerMetadata.userId;
+
+      await userService.updateOne({ _id: userId }, (doc) => {
+        const updatedProductsInCart = doc.productsInCart.filter((productId) => {
+          return !cartElementsToDelete.some((idToDelete) => idToDelete === productId);
+        });
+        console.log(updatedProductsInCart);
+        return ({
+          productsInCart: updatedProductsInCart,
         });
       });
   }

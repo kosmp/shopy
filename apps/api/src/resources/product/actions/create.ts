@@ -6,6 +6,7 @@ import { cloudStorageService } from 'services';
 import multer from '@koa/multer';
 import Stripe from 'stripe';
 import config from 'config';
+import * as console from 'console';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
   apiVersion: '2023-08-16',
@@ -25,9 +26,11 @@ type ValidatedData = z.infer<typeof schema>;
 
 async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
   const { productName } = ctx.validatedData;
-  const isProductExists = await productService.exists({ productName });
 
-  ctx.assertError(!isProductExists, 'Product with such name already exists');
+  const foundProduct = await productService.findOne({ productName, soldOut: false });
+  if (foundProduct) {
+    ctx.assertError(foundProduct.soldOut, 'Product with such name already exists');
+  }
 
   await next();
 }
