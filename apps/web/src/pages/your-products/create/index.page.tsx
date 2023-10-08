@@ -103,7 +103,7 @@ const Create: NextPage = () => {
       <Stack spacing="20px">
         <Text size="20px" className={classes.text}>Create New Product</Text>
         <Group spacing="16px">
-          <Image src={imageUrl} alt="Uploaded image" width="180px" radius="20px" fit="contain" />
+          <Image src={imageUrl} alt="Uploaded image" width="180px" radius={20} fit="contain" />
           <FileButton onChange={handleFileChange} accept="image/png,image/jpeg,image/jpg">
             {(props) => <UnstyledButton {...props} className={classes.uploadButton}>Upload Photo</UnstyledButton>}
           </FileButton>
@@ -117,7 +117,7 @@ const Create: NextPage = () => {
           <Text size="16px" className={classes.text}>Title of the product</Text>
           <TextInput
             placeholder="Enter title of the product..."
-            radius="8px"
+            radius={8}
             className={classes.input}
             value={title}
             onChange={(event) => {
@@ -138,7 +138,7 @@ const Create: NextPage = () => {
           <NumberInput
             hideControls
             placeholder="Enter price of the product"
-            radius="8px"
+            radius={8}
             className={classes.input}
             value={Number(price) ?? 1}
             onInput={(e) => {
@@ -164,7 +164,7 @@ const Create: NextPage = () => {
           <NumberInput
             hideControls
             placeholder="Enter available count of products"
-            radius="8px"
+            radius={8}
             className={classes.input}
             value={Number(count) ?? 1}
             onInput={(e) => {

@@ -114,7 +114,7 @@ const Marketplace: NextPage = () => {
             <TextInput
               icon={<Search />}
               placeholder="Type to search..."
-              radius="8px"
+              radius={8}
               size="lg"
               value={valueToSearch}
               onChange={handleSearch}

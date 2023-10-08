@@ -15,13 +15,15 @@ const ActiveFilterPill : FC<FilterProps> = ({
 
   useEffect(() => {
     if (inputValueFrom !== ''
-            && inputValueTo !== ''
-            && inputValueFrom < inputValueTo
+      && inputValueTo !== ''
+      && inputValueFrom < inputValueTo
     ) {
       setIsVisible(true);
-    } else {
-      setIsVisible(false);
+
+      return;
     }
+
+    setIsVisible(false);
   }, [inputValueFrom, inputValueTo]);
 
   const handleRemoveClick = () => {
@@ -38,6 +40,7 @@ const ActiveFilterPill : FC<FilterProps> = ({
         -$
         {inputValueTo}
       </Box>
+
       <UnstyledButton
         className={classes.removeButton}
         onClick={handleRemoveClick}

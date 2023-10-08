@@ -18,7 +18,7 @@ export const useStyles = createStyles(() => ({
     zIndex: 1,
     top: '16px',
     right: '16px',
-    borderRadius: '8px',
+    borderRadius: 8,
     padding: '6px',
     backgroundColor: '#FFF',
   },

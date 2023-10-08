@@ -11,7 +11,7 @@ export const useStyles = createStyles(() => ({
     fontStyle: 'normal',
     fontWeight: 500,
     lineHeight: '24px',
-    borderRadius: '20px',
+    borderRadius: 20,
     padding: '2px 20px 2px 20px',
     cursor: 'pointer',
     transition: 'background-color 0.3s, color 0.3s, box-shadow 0.3s',

@@ -1,4 +1,4 @@
-import { Flex, NumberInput, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
+import { Flex, Group, NumberInput, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { Dispatch, FC, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
@@ -55,10 +55,10 @@ const Filters: FC<FilterProps> = ({
   };
 
   return (
-    <Paper className={classes.filterCard}>
-      <Stack>
-        <Flex className={classes.firstRow}>
-          <Text className={classes.filtersText}>Filters</Text>
+    <Paper p="20px">
+      <Stack spacing="32px">
+        <Group position="apart">
+          <Text fz="20px" fw={700}>Filters</Text>
           <UnstyledButton
             className={classes.resetButton}
             variant="transparent"
@@ -67,22 +67,22 @@ const Filters: FC<FilterProps> = ({
             Reset All&nbsp;
             <IconX size="10px" />
           </UnstyledButton>
-        </Flex>
+        </Group>
         <Stack>
-          <Text className={classes.priceText}>Price</Text>
+          <Text fz="16px" fw="700">Price</Text>
           <Flex className={classes.filterCellsContainer}>
             <NumberInput
               className={classes.leftFilterCell}
               hideControls
               placeholder="From:"
-              radius="8px"
+              radius={8}
               value={priceValueFrom}
               onInput={(e) => handleInput(e, setPriceValueFrom)}
             />
             <NumberInput
               hideControls
               placeholder="To:"
-              radius="8px"
+              radius={8}
               value={priceValueTo}
               onInput={(e) => handleInput(e, setPriceValueTo)}
             />

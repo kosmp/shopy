@@ -16,7 +16,7 @@ const appTheme: MantineThemeOverride = {
         },
         root: {
           padding: '4px 20px',
-          borderRadius: '8px',
+          borderRadius: 8,
         },
       }),
 
@@ -25,7 +25,7 @@ const appTheme: MantineThemeOverride = {
       defaultProps: { size: 'lg' },
       styles: () => ({
         root: {
-          borderRadius: '12px',
+          borderRadius: 12,
           border: '1.126px solid var(--Black-100, #ECECEE)',
           background: '#FFF',
           overflow: 'hidden',

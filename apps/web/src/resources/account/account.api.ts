@@ -36,18 +36,6 @@ export function useSignUp<T>() {
   return useMutation<SignUpResponse, unknown, T>(signUp);
 }
 
-export function useForgotPassword<T>() {
-  const forgotPassword = (data: T) => apiService.post('/account/forgot-password', data);
-
-  return useMutation<{}, unknown, T>(forgotPassword);
-}
-
-export function useResetPassword<T>() {
-  const resetPassword = (data: T) => apiService.put('/account/reset-password', data);
-
-  return useMutation<{}, unknown, T>(resetPassword);
-}
-
 export function useResendEmail<T>() {
   const resendEmail = (data: T) => apiService.post('/account/resend-email', data);
 
@@ -64,26 +52,6 @@ export function useUpdate<T>() {
   const update = (data: T) => apiService.put('/account', data);
 
   return useMutation<userTypes.User, unknown, T>(update);
-}
-
-export function useUploadAvatar<T>() {
-  const uploadAvatar = (data: T) => apiService.post('/account/avatar', data);
-
-  return useMutation<userTypes.User, unknown, T>(uploadAvatar, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['account'], data);
-    },
-  });
-}
-
-export function useRemoveAvatar() {
-  const removeAvatar = () => apiService.delete('/account/avatar');
-
-  return useMutation<userTypes.User>(removeAvatar, {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['account'], data);
-    },
-  });
 }
 
 export function useAddProductToCart<T>() {

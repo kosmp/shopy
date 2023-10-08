@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import db from 'db';
 import { DATABASE_DOCUMENTS } from 'app.constants';
 
@@ -10,8 +8,4 @@ const service = db.createService<Product>(DATABASE_DOCUMENTS.PRODUCTS, {
   schemaValidator: (obj) => schema.parseAsync(obj),
 });
 
-const getPublic = (product: Product | null) => _.omit(product, []);
-
-export default Object.assign(service, {
-  getPublic,
-});
+export default Object.assign(service, { });

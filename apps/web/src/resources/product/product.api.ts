@@ -4,13 +4,13 @@ import { apiService } from 'services';
 
 import { Product } from './product.types';
 
+interface ProductListResponse {
+  count: number;
+  items: Product[];
+}
+
 export function useList<T>(params: T) {
   const list = () => apiService.get('/products', params);
-
-  interface ProductListResponse {
-    count: number;
-    items: Product[];
-  }
 
   return useQuery<ProductListResponse>(['products', params], list);
 }
@@ -20,7 +20,7 @@ export function useUploadProduct<T>() {
 
   return useMutation<Product, unknown, T>(uploadProduct, {
     onSuccess: (data) => {
-      queryClient.setQueryData(['products'], data._id);
+      queryClient.setQueryData(['products', data._id], data);
     },
   });
 }

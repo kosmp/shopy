@@ -13,7 +13,7 @@ export const useStyles = createStyles(() => ({
     width: '694px',
   },
   uploadButton: {
-    borderRadius: '8px',
+    borderRadius: 8,
     border: '1px solid var(--Black-200, #CFCFCF)',
     padding: '4px 20px',
     fontSize: '14px',

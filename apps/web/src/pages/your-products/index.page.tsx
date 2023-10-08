@@ -6,7 +6,7 @@ import { useStyles } from './styles';
 
 const YourProducts: NextPage = () => {
   const { classes } = useStyles();
-  const { data } = productApi.useList({ showYourProducts: 'true', showNotSoldOut: 'false' });
+  const { data } = productApi.useList({ showYourProducts: true, showNotSoldOut: false });
 
   return (
     <Stack spacing="20px">

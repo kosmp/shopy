@@ -22,7 +22,7 @@ export const getHistoryColumns = (styles: Record<string, string>) => {
           <Image
             width="80"
             height="80"
-            radius="8px"
+            radius={8}
             src={info.row.original.imageUrl}
             alt={info.row.original.productName}
           />
@@ -88,7 +88,7 @@ export const getMyCartColumns = (
           <Image
             width="80"
             height="80"
-            radius="8px"
+            radius={8}
             src={info.row.original.imageUrl}
             alt={info.row.original.productName}
           />

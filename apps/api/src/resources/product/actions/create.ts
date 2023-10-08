@@ -6,7 +6,6 @@ import { cloudStorageService } from 'services';
 import multer from '@koa/multer';
 import Stripe from 'stripe';
 import config from 'config';
-import * as console from 'console';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY, {
   apiVersion: '2023-08-16',
@@ -23,6 +22,10 @@ const schema = z.object({
 
 type ValidatedData = z.infer<typeof schema>;
 
+interface CloudinaryUploadResult {
+  secure_url: string;
+  public_id: string;
+}
 
 async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
   const { productName } = ctx.validatedData;
@@ -35,76 +38,66 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
   await next();
 }
 
-interface CloudinaryUploadResult {
-  secure_url: string;
-  public_id: string;
-}
-
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { productName, productPrice, soldOut, productCount } = ctx.validatedData;
   const { file } = ctx.request;
+  
+  const res = await new Promise<CloudinaryUploadResult | undefined>((resolve, reject) => {
+    cloudStorageService.uploader.upload_stream(
+      { resource_type: 'auto' },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      },
+    ).end(file.buffer);
+  });
 
-  try {
-    const res = await new Promise<CloudinaryUploadResult | undefined>((resolve, reject) => {
-      cloudStorageService.uploader.upload_stream(
-        { resource_type: 'auto' },
-        (error, result) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(result);
-          }
-        },
-      ).end(file.buffer);
+  if (res) {
+    const product = await stripe.products.create({
+      name: productName,
+      active: true,
+      images: [ res.secure_url ],
     });
 
-    if (res) {
-      const product = await stripe.products.create({
-        name: productName,
-        active: true,
-        images: [ res.secure_url ],
-      });
+    const price = await stripe.prices.create({
+      unit_amount: Number(productPrice + '00'),
+      currency: 'usd',
+      product: product.id,
+    });
 
-      const price = await stripe.prices.create({
-        unit_amount: Number(productPrice + '00'),
-        currency: 'usd',
-        product: product.id,
-      });
-
-      if (!product || !price) {
-        ctx.status = 500;
-        ctx.body = { error: 'The product was not created in checkout' };
-      }
-
-      await productService.insertOne({
-        _id: product.id,
-        imageUrl: res.secure_url,
-        imagePublicId: res.public_id,
-        productName,
-        productPrice: Number(productPrice),
-        priceId: price.id,
-        productCount: Number(productCount),
-        soldOut: soldOut === 'true',
-        createdBy: ctx.state.user._id,
-      });
-
-      ctx.body = {
-        priceId: price.id,
-        imageUrl: res.secure_url,
-        imagePublicId: res.public_id,
-        productName,
-        productPrice: Number(productPrice),
-        productCount: Number(productCount),
-        soldOut: soldOut === 'true',
-        createdBy: ctx.state.user._id,
-      };
-    } else {
+    if (!product || !price) {
       ctx.status = 500;
-      ctx.body = { error: 'No result received from cloud storage' };
+      ctx.body = { error: 'The product was not created in checkout' };
     }
-  } catch (error) {
+
+    await productService.insertOne({
+      _id: product.id,
+      imageUrl: res.secure_url,
+      imagePublicId: res.public_id,
+      productName,
+      productPrice: Number(productPrice),
+      priceId: price.id,
+      productCount: Number(productCount),
+      soldOut: soldOut === 'true',
+      createdBy: ctx.state.user._id,
+    });
+
+    ctx.body = {
+      priceId: price.id,
+      imageUrl: res.secure_url,
+      imagePublicId: res.public_id,
+      productName,
+      productPrice: Number(productPrice),
+      productCount: Number(productCount),
+      soldOut: soldOut === 'true',
+      createdBy: ctx.state.user._id,
+    };
+  } else {
     ctx.status = 500;
-    ctx.body = { error: 'Error uploading to cloud storage' };
+    ctx.body = { error: 'No result received from cloud storage' };
   }
 }
 

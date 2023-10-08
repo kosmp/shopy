@@ -27,10 +27,10 @@ const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut,
         <Image src={imageUrl} />
         <Stack className={classes.namePriceButtonStack}>
           <Stack spacing="13.51px">
-            <Text className={classes.text}>{productName}</Text>
+            <Text fz="20px" fw={700}>{productName}</Text>
             <Group position="apart">
               <Text className={classes.priceTitleText}>Price:</Text>
-              <Text className={classes.text}>
+              <Text fz="20px" fw={700}>
                 $
                 {productPrice}
               </Text>
