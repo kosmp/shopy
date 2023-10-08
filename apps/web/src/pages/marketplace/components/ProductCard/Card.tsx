@@ -9,23 +9,16 @@ import { FC } from 'react';
 import { Product } from 'types';
 import { accountApi } from 'resources/account';
 import { handleError } from 'utils';
-import { useLocalStorage } from '@mantine/hooks';
 import { useStyles } from './styles';
 
 const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut, priceId }) => {
   const { classes } = useStyles();
   const { mutate: addToCart } = accountApi.useAddProductToCart();
-  const [checkoutData, setCheckoutData] = useLocalStorage<{ productId: string, priceId: string, pickedQuantity: number, productPrice: number }[]>({ key: 'checkout_data', defaultValue: [], getInitialValueInEffect: false });
 
   const handleAddToCart = () => {
     addToCart({ productId: _id }, {
       onError: (err) => handleError(err),
     });
-
-    const foundIndex = checkoutData.findIndex((cartProduct: any) => cartProduct.productId === _id);
-    if (foundIndex === -1) {
-      setCheckoutData([...checkoutData, { productId: _id, priceId, pickedQuantity: 1, productPrice }]);
-    }
   };
 
   return (

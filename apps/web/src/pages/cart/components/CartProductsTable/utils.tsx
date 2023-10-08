@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Group, Image, Text } from '@mantine/core';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { productTypes } from 'resources/product';
-import { HistoryColumnsData } from '../../types';
+import { CheckOutData, HistoryColumnsData } from '../../types';
 import QuantityCell from '../QuantityCell';
 import RemoveButton from '../RemoveButton';
 
@@ -70,6 +70,8 @@ export const getHistoryColumns = (styles: Record<string, string>) => {
 
 export const getMyCartColumns = (
   styles: Record<string, string>,
+  checkOutData: CheckOutData[],
+  setCheckoutData: Dispatch<SetStateAction<CheckOutData[]>>,
 ) => {
   const myCartColumns: ColumnDef<productTypes.Product>[] = [
     {
@@ -123,10 +125,11 @@ export const getMyCartColumns = (
       ),
       cell: (info) => (
         <QuantityCell
-          productId={info.row.original._id}
           priceId={info.row.original.priceId}
           productPrice={info.row.original.productPrice}
           maxValue={info.row.original.productCount}
+          checkOutData={checkOutData}
+          setCheckoutData={setCheckoutData}
         />
       ),
     },

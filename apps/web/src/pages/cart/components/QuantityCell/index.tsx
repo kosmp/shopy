@@ -1,42 +1,74 @@
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { ActionIcon, Group, Text } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
 import { useStyles } from '../../styles';
+import { CheckOutData } from '../../types';
 
 interface QuantityCellProps {
   maxValue: number;
   priceId: string;
   productPrice: number;
-  productId: string;
+  checkOutData: CheckOutData[];
+  setCheckoutData: Dispatch<SetStateAction<CheckOutData[]>>
 }
 
-const QuantityCell: FC<QuantityCellProps> = ({ maxValue, priceId, productPrice, productId }) => {
+const QuantityCell: FC<QuantityCellProps> = ({ maxValue, priceId, productPrice, checkOutData, setCheckoutData }) => {
   const { classes } = useStyles();
-  const [checkoutData, setCheckoutData] = useLocalStorage<{ productId: string, priceId: string, pickedQuantity: number, productPrice: number }[]>({ key: 'checkout_data', defaultValue: [], getInitialValueInEffect: false });
-  const [value, setValue] = useState<number>(checkoutData?.find((cartProduct: any) => cartProduct.productId === productId)?.pickedQuantity ?? 1);
+  const [value, setValue] = useState<number>(checkOutData?.find((cartProduct: any) => cartProduct.priceId === priceId)?.pickedQuantity ?? 1);
+
+  useEffect(() => {
+    if (value === 1) {
+      const foundIndex = checkOutData.findIndex((cartItem) => cartItem.priceId === priceId);
+
+      if (foundIndex === -1) {
+        setCheckoutData([...checkOutData, {
+          priceId,
+          productPrice,
+          pickedQuantity: value,
+        }]);
+      }
+    }
+  }, []);
 
   const handleDecrement = () => {
     if (value > 1) {
-      const foundIndex = checkoutData.findIndex((cartProduct: any) => cartProduct.productId === productId);
+      const foundIndex = checkOutData.findIndex((cartItem) => cartItem.priceId === priceId);
+
       if (foundIndex >= 0) {
-        checkoutData[foundIndex].pickedQuantity -= 1;
-        setCheckoutData(checkoutData);
+        setCheckoutData(checkOutData.map((cartItem) => ({
+          priceId: cartItem.priceId,
+          productPrice,
+          pickedQuantity: cartItem.priceId === priceId ? (cartItem.pickedQuantity - 1) : cartItem.pickedQuantity,
+        })));
       } else {
-        setCheckoutData([...checkoutData, { productId, productPrice, priceId, pickedQuantity: value - 1 }]);
+        setCheckoutData([...checkOutData, {
+          priceId,
+          productPrice,
+          pickedQuantity: value,
+        }]);
       }
+
       setValue(value - 1);
     }
   };
 
   const handleIncrement = () => {
     if (value < maxValue) {
-      const foundIndex = checkoutData.findIndex((cartProduct: any) => cartProduct.productId === productId);
+      const foundIndex = checkOutData.findIndex((cartItem) => cartItem.priceId === priceId);
+
       if (foundIndex >= 0) {
-        checkoutData[foundIndex].pickedQuantity += 1;
-        setCheckoutData(checkoutData);
+        setCheckoutData(checkOutData.map((cartItem) => ({
+          priceId: cartItem.priceId,
+          productPrice,
+          pickedQuantity: cartItem.priceId === priceId ? (cartItem.pickedQuantity + 1) : cartItem.pickedQuantity,
+        })));
       } else {
-        setCheckoutData([...checkoutData, { productId, productPrice, priceId, pickedQuantity: value + 1 }]);
+        setCheckoutData([...checkOutData, {
+          priceId,
+          productPrice,
+          pickedQuantity: value,
+        }]);
       }
+
       setValue(value + 1);
     }
   };

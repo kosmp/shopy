@@ -4,20 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { Skeleton, Stack, Tabs, Group } from '@mantine/core';
 import { productApi, productTypes } from 'resources/product';
 import { accountApi } from 'resources/account';
-import { useLocalStorage } from '@mantine/hooks';
-import { HistoryColumnsData } from './types';
+import { HistoryColumnsData, CheckOutData } from './types';
 import { useStyles } from './styles';
 import { getHistoryColumns, getMyCartColumns } from './components/CartProductsTable/utils';
 import Summary from './components/Summary';
 import CartProductsTable from './components/CartProductsTable';
 import { paymentApi } from '../../resources/payment';
 import EmptyStateCard from './components/EmptyStateCard';
-
-interface CheckOutData {
-  priceId: string,
-  productPrice: number,
-  pickedQuantity: number,
-}
 
 const Cart: NextPage = () => {
   const { classes } = useStyles();
@@ -26,32 +19,9 @@ const Cart: NextPage = () => {
   const { data: allProducts, isLoading: isListLoading } = productApi.useList({});
   const { data: currentUser } = accountApi.useGet();
   const [myCartData, setMyCartData] = useState<Array<productTypes.Product>>([]);
-  const [checkoutData] = useLocalStorage<CheckOutData[]>({ key: 'checkout_data', defaultValue: [], getInitialValueInEffect: false });
+  const [checkoutData, setCheckoutData] = useState<CheckOutData[]>([]);
   const { data: historyData } = paymentApi.useGetPaymentHistory();
   const [resultHistoryData, setResultHistoryData] = useState<Array<HistoryColumnsData>>([]);
-
-  // const handleHistoryData = (): HistoryColumnsData[] => {
-  //   const result: HistoryColumnsData[] = [];
-  //
-  //   if (historyData) {
-  //     historyData?.forEach((historyItem) => {
-  //       historyItem?.productList.forEach((productListItem) => {
-  //         const matchingProduct = currentUser?.purchasedProducts.find((product) => product.priceId === productListItem.priceId);
-  //
-  //         if (matchingProduct) {
-  //           result.push({
-  //             imageUrl: matchingProduct.imageUrl,
-  //             productName: matchingProduct.productName,
-  //             productPrice: matchingProduct.productPrice,
-  //             purchaseDate: historyItem.createdDate,
-  //           });
-  //         }
-  //       });
-  //     });
-  //   }
-  //
-  //   return result;
-  // };
 
   useEffect(() => {
     setTotalPrice(checkoutData.reduce((result, item) => (result + item.pickedQuantity * item.productPrice), 0));
@@ -101,7 +71,7 @@ const Cart: NextPage = () => {
           )}
           {(currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length) ? (
             <CartProductsTable
-              columns={currentTabValue === 'my cart' ? getMyCartColumns(classes) : getHistoryColumns(classes)}
+              columns={currentTabValue === 'my cart' ? getMyCartColumns(classes, checkoutData, setCheckoutData) : getHistoryColumns(classes)}
               data={currentTabValue === 'my cart' ? myCartData : resultHistoryData}
             />
           ) : (
