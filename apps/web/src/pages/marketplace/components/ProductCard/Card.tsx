@@ -11,7 +11,7 @@ import { accountApi } from 'resources/account';
 import { handleError } from 'utils';
 import { useStyles } from './styles';
 
-const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut, priceId }) => {
+const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice }) => {
   const { classes } = useStyles();
   const { mutate: addToCart } = accountApi.useAddProductToCart();
 

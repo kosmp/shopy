@@ -36,9 +36,9 @@ const SignIn: NextPage = () => {
         <title>Sign in</title>
       </Head>
 
-      <Stack sx={{ width: '408px' }} spacing={20}>
-        <Stack spacing={34}>
-          <Title order={1}>
+      <Stack sx={{ width: '408px' }} spacing={32}>
+        <Stack spacing={32}>
+          <Title order={2}>
             Sign In
           </Title>
 
@@ -49,6 +49,7 @@ const SignIn: NextPage = () => {
                 label="Email Address"
                 placeholder="Email Address"
                 error={errors.email?.message}
+                labelProps={{ style: { marginBottom: '8px' } }}
               />
 
               <PasswordInput
@@ -56,6 +57,7 @@ const SignIn: NextPage = () => {
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
+                labelProps={{ style: { marginBottom: '8px' } }}
               />
 
               {errors!.credentials && (
