@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Button, Image, Stack, Text } from '@mantine/core';
+import Link from 'next/link';
 import { useStyles } from './styles';
 
 const EmptyStateCard: FC = () => {
@@ -12,15 +13,17 @@ const EmptyStateCard: FC = () => {
         <Text fw={600} fz="20px">
           Oops, there&apos;s nothing here yet!
         </Text>
+
         <Text fz="14px" color="#767676" align="center">
           You haven&apos;t made any purchases yet.
           Go to the marketplace and make purchases.
         </Text>
-        <a href="/">
+
+        <Link href="/">
           <Button>
             Go to Marketplace
           </Button>
-        </a>
+        </Link>
       </Stack>
     </Stack>
   );

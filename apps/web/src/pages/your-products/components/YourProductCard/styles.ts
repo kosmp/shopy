@@ -11,7 +11,7 @@ export const useStyles = createStyles(() => ({
     lineHeight: 'normal',
   },
   priceTitleText: {
-    color: 'var(--Black-300, #A3A3A3)',
+    color: '#A3A3A3',
   },
   trashButton: {
     position: 'absolute',

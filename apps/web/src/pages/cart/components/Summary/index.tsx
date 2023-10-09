@@ -26,6 +26,7 @@ const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
       quantity: number;
     }[] = checkoutData.map((item) => {
       const { productPrice, removed, ...rest } = item;
+
       return {
         price: rest.priceId,
         quantity: rest.pickedQuantity,
@@ -38,15 +39,23 @@ const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
   return (
     <Paper className={classes.summaryCard}>
       <Stack spacing="32px">
-        <Text className={classes.summaryTitleText}>Summary</Text>
+        <Text className={classes.summaryTitleText}>
+          Summary
+        </Text>
+
         <Divider />
+
         <Group position="apart">
-          <Text className={classes.totalPriceTitle}>Total price</Text>
+          <Text className={classes.totalPriceTitle}>
+            Total price
+          </Text>
+
           <Text>
             $
             {totalPrice}
           </Text>
         </Group>
+
         <Button onClick={handleProceed} loading={loading}>Proceed to Checkout</Button>
       </Stack>
     </Paper>

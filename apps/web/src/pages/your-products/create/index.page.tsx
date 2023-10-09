@@ -17,6 +17,8 @@ import { handleError } from 'utils';
 import router from 'next/router';
 import { useStyles } from './styles';
 
+const ONE_MB_MIN_BYTES = 1048576;
+
 const Create: NextPage = () => {
   const { classes } = useStyles();
   const [imageUrl, setImageUrl] = useState<string | null>('../images/imagePlaceholder.png');
@@ -34,27 +36,38 @@ const Create: NextPage = () => {
   const handleFileChange = (selectedFile: File | null) => {
     setImageError(null);
     setImageFile(selectedFile);
+
     if (selectedFile) {
       const objectUrl = URL.createObjectURL(selectedFile);
       setImageUrl(objectUrl);
-    } else {
-      setImageUrl(null);
+
+      return;
     }
+
+    setImageUrl(null);
   };
 
   const isFileSizeCorrect = (file: any) => {
-    const oneMBinBytes = 1048576;
-    if ((file.size / oneMBinBytes) > 2) {
+    if ((file.size / ONE_MB_MIN_BYTES) > 2) {
       setImageError('Sorry, you cannot upload a file larger than 2 MB.');
+
       return false;
     }
+
     return true;
   };
 
   const isFileFormatCorrect = (file: File | null) => {
-    if (!file) return false;
-    if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) return true;
+    if (!file) {
+      return false;
+    }
+
+    if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
+      return true;
+    }
+
     setImageError('Sorry, you can only upload JPG, JPEG or PNG photos.');
+
     return false;
   };
 
@@ -71,11 +84,13 @@ const Create: NextPage = () => {
 
     if (!count) {
       setImageError('Please fill in available count');
+
       return;
     }
 
     if (!imageFile) {
       setImageError('Please import product photo');
+
       return;
     }
 
@@ -101,20 +116,29 @@ const Create: NextPage = () => {
   return (
     <Box className={classes.externalBox}>
       <Stack spacing="20px">
-        <Text size="20px" className={classes.text}>Create New Product</Text>
+        <Text size="20px" className={classes.text}>
+          Create New Product
+        </Text>
+
         <Group spacing="16px">
           <Image src={imageUrl} alt="Uploaded image" width="180px" radius={20} fit="contain" />
+
           <FileButton onChange={handleFileChange} accept="image/png,image/jpeg,image/jpg">
             {(props) => <UnstyledButton {...props} className={classes.uploadButton}>Upload Photo</UnstyledButton>}
           </FileButton>
         </Group>
+
         {imageError && (
         <Text color="red" size="16px">
           {imageError}
         </Text>
         )}
+
         <Stack spacing="8px">
-          <Text size="16px" className={classes.text}>Title of the product</Text>
+          <Text size="16px" className={classes.text}>
+            Title of the product
+          </Text>
+
           <TextInput
             placeholder="Enter title of the product..."
             radius={8}
@@ -133,8 +157,12 @@ const Create: NextPage = () => {
             error={titleError}
           />
         </Stack>
+
         <Stack spacing="8px">
-          <Text size="16px" className={classes.text}>Price</Text>
+          <Text size="16px" className={classes.text}>
+            Price
+          </Text>
+
           <NumberInput
             hideControls
             placeholder="Enter price of the product"
@@ -159,8 +187,12 @@ const Create: NextPage = () => {
             error={priceError}
           />
         </Stack>
+
         <Stack spacing="8px">
-          <Text size="16px" className={classes.text}>Count of products</Text>
+          <Text size="16px" className={classes.text}>
+            Count of products
+          </Text>
+
           <NumberInput
             hideControls
             placeholder="Enter available count of products"
@@ -186,6 +218,7 @@ const Create: NextPage = () => {
           />
         </Stack>
       </Stack>
+
       <Box className={classes.buttonBox}>
         <Button className={classes.uploadProductButton} onClick={handleUploadProduct} loading={loading}>
           Upload Product

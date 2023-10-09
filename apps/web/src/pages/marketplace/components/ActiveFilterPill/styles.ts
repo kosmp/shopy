@@ -1,11 +1,11 @@
 import { createStyles } from '@mantine/core';
 
-export const useStyles = createStyles((shipTheme) => ({
+export const useStyles = createStyles(() => ({
   filterPillBox: {
     cursor: 'default',
     alignItems: 'center',
-    backgroundColor: shipTheme.white,
-    border: `1px solid ${shipTheme.colors.gray[4]}`,
+    backgroundColor: '#FFF',
+    border: '1px solid #ECECEE',
     borderRadius: 31,
     padding: '10px 20px',
   },

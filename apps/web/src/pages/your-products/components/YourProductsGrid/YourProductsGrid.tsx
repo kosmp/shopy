@@ -23,6 +23,7 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
               <ThemeIcon radius="xl" size="40px">
                 <IconPlus />
               </ThemeIcon>
+
               <Text className={classes.newProductText}>
                 New Product
               </Text>
@@ -30,6 +31,7 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
           </Paper>
         </Link>
       </Grid.Col>
+
       {products.map((product: Product) => (
         <Grid.Col span={2} key={product._id}>
           <YourProductCard

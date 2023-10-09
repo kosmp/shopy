@@ -20,8 +20,6 @@ const schema = z.object({
   CLOUD_STORAGE_NAME: z.string().optional(),
   CLOUD_STORAGE_API_KEY: z.string().optional(),
   CLOUD_STORAGE_API_SECRET: z.string().optional(),
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
   STRIPE_SECRET_KEY: z.string(),
   STRIPE_ENDPOINT_SECRET: z.string(),
 });

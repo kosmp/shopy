@@ -13,6 +13,7 @@ const YourProducts: NextPage = () => {
       <Text className={classes.text}>
         Your Products
       </Text>
+
       <YourProductsGrid products={data?.items ?? []} />
     </Stack>
   );

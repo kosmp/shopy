@@ -27,7 +27,10 @@ const RemoveButton: FC<RemoveButtonProps> = ({ productId }) => {
     <ActionIcon variant="transparent" className={classes.otherColumns}>
       <Group spacing={0} grow onClick={handleRemove}>
         <IconX size="20px" />
-        <Text>Remove</Text>
+
+        <Text>
+          Remove
+        </Text>
       </Group>
     </ActionIcon>
   );

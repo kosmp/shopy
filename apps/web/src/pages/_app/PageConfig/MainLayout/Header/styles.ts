@@ -5,7 +5,7 @@ export const useStyles = createStyles(() => ({
     color: 'black',
     cursor: 'pointer',
     fontFamily: 'DM Sans',
-    fontSize: '28.985px',
+    fontSize: '29px',
     fontWeight: 700,
     fontStyle: 'normal',
   },
@@ -15,6 +15,6 @@ export const useStyles = createStyles(() => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'var(--Black-50, #FCFCFC)',
+    backgroundColor: '#FCFCFC',
   },
 }));

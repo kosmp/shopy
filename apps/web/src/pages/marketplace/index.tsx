@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 
 import { IconArrowsDownUp, IconChevronDown } from '@tabler/icons-react';
-import { Search } from 'public/images';
+import { Search } from 'public/icons';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { useDebouncedValue } from '@mantine/hooks';
@@ -80,12 +80,13 @@ const Marketplace: NextPage = () => {
         ...prev,
         filter: { productPrice: { minPrice: inputFilterValueFrom, maxPrice: inputFilterValueTo } },
       }));
-    } else {
-      setParams((prev) => ({
-        ...prev,
-        filter: {},
-      }));
+
+      return;
     }
+    setParams((prev) => ({
+      ...prev,
+      filter: {},
+    }));
   }, [inputFilterValueFrom, inputFilterValueTo]);
 
   useEffect(() => {
@@ -100,6 +101,7 @@ const Marketplace: NextPage = () => {
       <Head>
         <title>Marketplace</title>
       </Head>
+
       <Grid>
         <Grid.Col span={3}>
           <Filters
@@ -109,6 +111,7 @@ const Marketplace: NextPage = () => {
             handleInputChangeTo={setInputFilterValueTo}
           />
         </Grid.Col>
+
         <Grid.Col span={9}>
           <Stack>
             <TextInput
@@ -119,6 +122,7 @@ const Marketplace: NextPage = () => {
               value={valueToSearch}
               onChange={handleSearch}
             />
+
             <Stack>
               <Flex className={classes.activeFiltersAndResults}>
                 <Text>
@@ -126,6 +130,7 @@ const Marketplace: NextPage = () => {
                   {' '}
                   Results
                 </Text>
+
                 <Group spacing="6px">
                   <UnstyledButton
                     className={classes.switchButton}
@@ -133,6 +138,7 @@ const Marketplace: NextPage = () => {
                   >
                     <IconArrowsDownUp size="16px" color="gray" />
                   </UnstyledButton>
+
                   <Select
                     allowDeselect
                     className={classes.selectSort}
@@ -146,7 +152,9 @@ const Marketplace: NextPage = () => {
                   />
                 </Group>
               </Flex>
+
               <Space />
+
               <Group className={classes.activeFilterPillsGroup}>
                 <ActiveFilterPill
                   inputValueFrom={inputFilterValueFrom}
@@ -156,6 +164,7 @@ const Marketplace: NextPage = () => {
                 />
               </Group>
             </Stack>
+
             {isListLoading && (
             <>
               {[1, 2, 3].map((item) => (
@@ -168,6 +177,7 @@ const Marketplace: NextPage = () => {
               ))}
             </>
             )}
+
             {data?.items.length && !isListLoading ? (
               <Products
                 data={data.items}
@@ -184,6 +194,7 @@ const Marketplace: NextPage = () => {
           </Stack>
         </Grid.Col>
       </Grid>
+
       <Pagination
         total={Math.ceil((data?.items.length ?? 0) / ITEMS_PER_PAGE)}
         value={currentPage}

@@ -14,13 +14,13 @@ export const useStyles = createStyles(() => ({
   },
   uploadButton: {
     borderRadius: 8,
-    border: '1px solid var(--Black-200, #CFCFCF)',
+    border: '1px solid #CFCFCF',
     padding: '4px 20px',
     fontSize: '14px',
     fontStyle: 'normal',
     fontWeight: 500,
     lineHeight: '21px',
-    color: 'var(--Black-400, #767676)',
+    color: '#767676',
   },
   uploadProductButton: {
     marginTop: '28px',

@@ -35,9 +35,13 @@ const SignIn: NextPage = () => {
       <Head>
         <title>Sign in</title>
       </Head>
+
       <Stack sx={{ width: '408px' }} spacing={20}>
         <Stack spacing={34}>
-          <Title order={1}>Sign In</Title>
+          <Title order={1}>
+            Sign In
+          </Title>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={20}>
               <TextInput
@@ -46,27 +50,21 @@ const SignIn: NextPage = () => {
                 placeholder="Email Address"
                 error={errors.email?.message}
               />
+
               <PasswordInput
                 {...register('password')}
                 label="Password"
                 placeholder="Enter password"
                 error={errors.password?.message}
               />
+
               {errors!.credentials && (
                 <Alert icon={<IconAlertCircle size={16} />} color="red">
                   {errors.credentials.message}
                 </Alert>
               )}
-              <Link
-                href={RoutePath.ForgotPassword}
-                type="router"
-                underline={false}
-                size="md"
-                align="center"
-              >
-                Forgot password?
-              </Link>
             </Stack>
+
             <Button
               loading={isSignInLoading}
               type="submit"
@@ -80,6 +78,7 @@ const SignIn: NextPage = () => {
 
         <Group sx={{ fontSize: '16px', justifyContent: 'center' }} spacing={12}>
           Don’t have an account?
+
           <Link
             type="router"
             href={RoutePath.SignUp}

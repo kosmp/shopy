@@ -13,6 +13,7 @@ const FailedPayment: NextPage = () => {
       <Head>
         <title>Payment Failed</title>
       </Head>
+
       <Group position="center" className={classes.group}>
         <PaymentResultCard
           paymentStatusText="Payment Failed"

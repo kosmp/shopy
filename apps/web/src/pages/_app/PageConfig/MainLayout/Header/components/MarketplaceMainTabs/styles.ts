@@ -6,7 +6,7 @@ export const useStyles = createStyles(() => ({
     gap: '32px',
   },
   tab: {
-    color: 'var(--Black-300, #A3A3A3)',
+    color: '#A3A3A3',
     fontSize: '16px',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -21,17 +21,17 @@ export const useStyles = createStyles(() => ({
     },
 
     '&:hover': {
-      backgroundColor: 'var(--Black-100, #ECECEE)',
+      backgroundColor: '#ECECEE',
     },
 
     '&[data-active]': {
       zIndex: 1,
-      backgroundColor: 'var(--Black-100, #ECECEE)',
-      borderColor: 'var(--Black-100, #ECECEE)',
+      backgroundColor: '#ECECEE',
+      borderColor: '#ECECEE',
       color: 'var(--mantine-color-white)',
 
       '&:hover': {
-        backgroundColor: 'var(--Black-100, #ECECEE)',
+        backgroundColor: '#ECECEE',
       },
     },
   },

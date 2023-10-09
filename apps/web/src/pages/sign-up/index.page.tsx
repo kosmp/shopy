@@ -17,8 +17,6 @@ import {
   Tooltip,
 } from '@mantine/core';
 
-import { GoogleIcon } from 'public/icons';
-
 import config from 'config';
 import { RoutePath } from 'routes';
 import { handleError } from 'utils';
@@ -27,8 +25,6 @@ import { Link } from 'components';
 import { accountApi, accountConstants } from 'resources/account';
 
 const schema = z.object({
-  firstName: z.string().min(1, 'Please enter First name').max(100),
-  lastName: z.string().min(1, 'Please enter Last name').max(100),
   email: z.string().regex(accountConstants.emailRegex, 'Email format is incorrect.'),
   password: z.string().regex(accountConstants.passwordRegex, 'The password must contain 6 or more characters with at least one letter (a-z) and one number (0-9).'),
 });
@@ -98,6 +94,7 @@ const SignUp: NextPage = () => {
       p={4}
     >
       <Text>Password must:</Text>
+
       {passwordRulesData.map((ruleData) => (
         <Checkbox
           styles={{ label: { color: 'white' } }}
@@ -115,14 +112,17 @@ const SignUp: NextPage = () => {
         <Head>
           <title>Sign up</title>
         </Head>
+
         <Stack sx={{ width: '450px' }}>
           <Title order={2}>Thanks!</Title>
+
           <Text size="md" sx={({ colors }) => ({ color: colors.gray[5] })}>
             Please follow the instructions from the email to complete a sign up process.
             We sent an email with a confirmation link to
             {' '}
             <b>{email}</b>
           </Text>
+
           {signupToken && (
             <div>
               You look like a cool developer.
@@ -142,31 +142,20 @@ const SignUp: NextPage = () => {
       <Head>
         <title>Sign up</title>
       </Head>
+
       <Stack sx={{ width: '408px' }} spacing={20}>
         <Stack spacing={32}>
           <Title order={1}>Sign Up</Title>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={20}>
-              <TextInput
-                {...register('firstName')}
-                label="First Name"
-                maxLength={100}
-                placeholder="First Name"
-                error={errors.firstName?.message}
-              />
-              <TextInput
-                {...register('lastName')}
-                label="Last Name"
-                maxLength={100}
-                placeholder="Last Name"
-                error={errors.lastName?.message}
-              />
               <TextInput
                 {...register('email')}
                 label="Email Address"
                 placeholder="Email Address"
                 error={errors.email?.message}
               />
+
               <Tooltip
                 label={label}
                 withArrow
@@ -182,6 +171,7 @@ const SignUp: NextPage = () => {
                 />
               </Tooltip>
             </Stack>
+
             <Button
               type="submit"
               loading={isSignUpLoading}
@@ -194,6 +184,7 @@ const SignUp: NextPage = () => {
         </Stack>
         <Group sx={{ fontSize: '16px', justifyContent: 'center' }} spacing={12}>
           Have an account?
+
           <Link
             type="router"
             href={RoutePath.SignIn}

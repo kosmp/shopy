@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import Link from 'next/link';
 import { Button, Paper, Stack, Text, Image } from '@mantine/core';
 import { useStyles } from './styles';
 
@@ -15,19 +16,22 @@ const PaymentResultCard : FC<PaymentResultCardProps> = ({ paymentStatusText, des
     <Paper p="20px" className={classes.card}>
       <Stack spacing="32px" align="center">
         <Image maw={56} src={imagePath} />
+
         <Stack spacing="16px" align="center">
           <Text fw={600} fz="24px">
             {paymentStatusText}
           </Text>
+
           <Text color="#767676">
             {description}
           </Text>
         </Stack>
-        <a href="/cart">
+
+        <Link href="/cart">
           <Button>
             Back to Cart
           </Button>
-        </a>
+        </Link>
       </Stack>
     </Paper>
   );

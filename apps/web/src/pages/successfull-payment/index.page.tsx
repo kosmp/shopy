@@ -13,6 +13,7 @@ const SuccessfullPayment: NextPage = () => {
       <Head>
         <title>Payment Successfull</title>
       </Head>
+
       <Group position="center" className={classes.group}>
         <PaymentResultCard
           paymentStatusText="Payment Successfull"

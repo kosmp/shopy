@@ -78,7 +78,11 @@ const QuantityCell: FC<QuantityCellProps> = ({ maxValue, priceId, productPrice, 
       <ActionIcon size={24} variant="transparent" onClick={handleDecrement}>
         –
       </ActionIcon>
-      <Text size="md">{value}</Text>
+
+      <Text size="md">
+        {value}
+      </Text>
+
       <ActionIcon size={24} variant="transparent" onClick={handleIncrement}>
         +
       </ActionIcon>

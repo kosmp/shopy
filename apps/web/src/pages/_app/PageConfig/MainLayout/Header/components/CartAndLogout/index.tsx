@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Group, Indicator } from '@mantine/core';
-import { Cart, Logout } from 'public/images';
+import { Group, Indicator, Text } from '@mantine/core';
+import { Cart, Logout } from 'public/icons';
 import Link from 'next/link';
 import { RoutePath } from 'routes';
 import { accountApi } from 'resources/account';
@@ -18,18 +18,20 @@ const CartAndLogout: FC<CartAndLogoutProps> = ({ cartItemCount }) => {
     <Group className={classes.cardAndLogoutGroup}>
       <Link href={RoutePath.Cart}>
         <Cart />
+
         <Indicator
           className={classes.cartIndicator}
           inline
           label={cartItemCount >= 0 ? cartItemCount.toString() : ''}
           size={16}
         >
-          <span />
+          <Text span />
         </Indicator>
       </Link>
-      <a href="#" onClick={() => signOut()}>
+
+      <Link href="#" onClick={() => signOut()}>
         <Logout />
-      </a>
+      </Link>
     </Group>
   );
 };

@@ -58,18 +58,26 @@ const Filters: FC<FilterProps> = ({
     <Paper p="20px">
       <Stack spacing="32px">
         <Group position="apart">
-          <Text fz="20px" fw={700}>Filters</Text>
+          <Text fz="20px" fw={700}>
+            Filters
+          </Text>
+
           <UnstyledButton
             className={classes.resetButton}
             variant="transparent"
             onClick={resetFilters}
           >
             Reset All&nbsp;
+
             <IconX size="10px" />
           </UnstyledButton>
         </Group>
+
         <Stack>
-          <Text fz="16px" fw="700">Price</Text>
+          <Text fz="16px" fw="700">
+            Price
+          </Text>
+
           <Flex className={classes.filterCellsContainer}>
             <NumberInput
               className={classes.leftFilterCell}
@@ -79,6 +87,7 @@ const Filters: FC<FilterProps> = ({
               value={priceValueFrom}
               onInput={(e) => handleInput(e, setPriceValueFrom)}
             />
+
             <NumberInput
               hideControls
               placeholder="To:"

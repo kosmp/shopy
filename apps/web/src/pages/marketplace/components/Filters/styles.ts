@@ -9,6 +9,6 @@ export const useStyles = createStyles(() => ({
     marginRight: '12px',
   },
   resetButton: {
-    color: 'var(--Black-300, #A3A3A3)',
+    color: '#A3A3A3',
   },
 }));

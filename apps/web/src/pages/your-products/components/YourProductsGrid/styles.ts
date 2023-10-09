@@ -15,7 +15,7 @@ export const useStyles = createStyles(() => ({
     textDecoration: 'none',
   },
   newProductText: {
-    color: 'var(--Blue-600, #2B77EB)',
+    color: '#2B77EB',
     fontFamily: 'Poppins',
     fontSize: '20px',
     fontStyle: 'normal',

@@ -37,6 +37,7 @@ const MarketplaceMainTabs: FC = () => {
         >
           Marketplace
         </Tabs.Tab>
+
         <Tabs.Tab
           className={classes.tab}
           value="your products"

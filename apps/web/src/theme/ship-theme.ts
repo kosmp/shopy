@@ -26,7 +26,7 @@ const appTheme: MantineThemeOverride = {
       styles: () => ({
         root: {
           borderRadius: 12,
-          border: '1.126px solid var(--Black-100, #ECECEE)',
+          border: '1.126px solid #ECECEE',
           background: '#FFF',
           overflow: 'hidden',
           position: 'relative',

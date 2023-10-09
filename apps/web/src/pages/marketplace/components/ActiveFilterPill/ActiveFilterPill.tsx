@@ -1,5 +1,5 @@
 import { Box, Group, UnstyledButton } from '@mantine/core';
-import { RemoveButton } from 'public/images';
+import { RemoveButton } from 'public/icons';
 import { FC, useEffect, useState } from 'react';
 import { FilterProps } from '../../types';
 import { useStyles } from './styles';

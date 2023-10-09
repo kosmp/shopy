@@ -41,11 +41,14 @@ const ForgotPassword: NextPage = () => {
         <Head>
           <title>Password reset link expired</title>
         </Head>
+
         <Stack sx={{ width: '328px' }}>
           <Title order={2}>Reset link has been sent</Title>
+
           <Text component="p" sx={{ fontSize: '14px' }}>
             Reset link sent successfully
           </Text>
+
           <Button onClick={() => router.push(RoutePath.SignIn)}>
             Back to Sign In
           </Button>
@@ -59,11 +62,14 @@ const ForgotPassword: NextPage = () => {
       <Head>
         <title>Password reset link expired</title>
       </Head>
+
       <Stack sx={{ width: '328px' }}>
         <Title order={2}>Password reset link expired</Title>
+
         <Text component="p" mt={0}>
           Sorry, your password reset link has expired. Click the button below to get a new one.
         </Text>
+
         <Button
           onClick={onSubmit}
           loading={isResendEmailLoading}

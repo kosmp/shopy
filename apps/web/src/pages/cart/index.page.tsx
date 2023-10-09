@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { Skeleton, Stack, Tabs, Group } from '@mantine/core';
 import { productApi, productTypes } from 'resources/product';
 import { accountApi } from 'resources/account';
-import { HistoryColumnsData, CheckOutData } from './types';
+import { paymentApi } from 'resources/payment';
 import { useStyles } from './styles';
+import { HistoryColumnsData, CheckOutData } from './types';
 import { getHistoryColumns, getMyCartColumns } from './components/CartProductsTable/utils';
 import Summary from './components/Summary';
 import CartProductsTable from './components/CartProductsTable';
-import { paymentApi } from '../../resources/payment';
 import EmptyStateCard from './components/EmptyStateCard';
 
 const Cart: NextPage = () => {
@@ -49,14 +49,21 @@ const Cart: NextPage = () => {
       <Head>
         <title>Marketplace</title>
       </Head>
+
       <Group spacing="78px" grow={((currentTabValue === 'my cart' && !myCartData.length) || (currentTabValue === 'history' && !resultHistoryData.length))}>
         <Stack spacing="20px" className={((currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length)) ? classes.mainCartBlockStack : ''}>
           <Tabs defaultValue="my cart" variant="pills" activateTabWithKeyboard onTabChange={(value: string) => setCurrentTabValue(value)}>
             <Tabs.List>
-              <Tabs.Tab value="my cart" className={`${classes.tab} ${classes.leftTabMargin}`}>My cart</Tabs.Tab>
-              <Tabs.Tab value="history" className={`${classes.tab} ${classes.rightTabMargin}`}>History</Tabs.Tab>
+              <Tabs.Tab value="my cart" className={`${classes.tab} ${classes.leftTabMargin}`}>
+                My cart
+              </Tabs.Tab>
+
+              <Tabs.Tab value="history" className={`${classes.tab} ${classes.rightTabMargin}`}>
+                History
+              </Tabs.Tab>
             </Tabs.List>
           </Tabs>
+
           {isListLoading && (
           <>
             {[1, 2, 3].map((item) => (
@@ -69,6 +76,7 @@ const Cart: NextPage = () => {
             ))}
           </>
           )}
+
           {(currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length) ? (
             <CartProductsTable
               columns={currentTabValue === 'my cart' ? getMyCartColumns(classes, checkoutData, setCheckoutData) : getHistoryColumns(classes)}
@@ -80,6 +88,7 @@ const Cart: NextPage = () => {
             </Group>
           )}
         </Stack>
+
         {currentTabValue === 'my cart' && myCartData.length > 0 && <Summary totalPrice={totalPrice} checkoutData={checkoutData} />}
       </Group>
     </>

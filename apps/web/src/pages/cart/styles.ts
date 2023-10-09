@@ -2,7 +2,7 @@ import { createStyles } from '@mantine/core';
 
 export const useStyles = createStyles(() => ({
   tab: {
-    color: 'var(--Black-300, #A3A3A3)',
+    color: '#A3A3A3',
     fontSize: '20px',
     fontStyle: 'normal',
     fontWeight: 500,
@@ -17,17 +17,17 @@ export const useStyles = createStyles(() => ({
     },
 
     '&:hover': {
-      backgroundColor: 'var(--Black-50, #FCFCFC)',
+      backgroundColor: '#FCFCFC',
     },
 
     '&[data-active]': {
       zIndex: 1,
-      backgroundColor: 'var(--Black-50, #FCFCFC)',
-      borderColor: 'var(--Black-100, #ECECEE)',
+      backgroundColor: '#FCFCFC',
+      borderColor: '#ECECEE',
       color: 'var(--mantine-color-white)',
 
       '&:hover': {
-        backgroundColor: 'var(--Black-50, #FCFCFC)',
+        backgroundColor: '#FCFCFC',
       },
     },
   },
@@ -51,6 +51,6 @@ export const useStyles = createStyles(() => ({
     textAlign: 'right',
   },
   headersText: {
-    color: 'var(--Black-400, #767676)',
+    color: '#767676',
   },
 }));

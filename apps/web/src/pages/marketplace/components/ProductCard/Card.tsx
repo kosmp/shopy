@@ -25,17 +25,25 @@ const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice, soldOut,
     <Paper>
       <Stack>
         <Image src={imageUrl} />
+
         <Stack className={classes.namePriceButtonStack}>
           <Stack spacing="13.51px">
-            <Text fz="20px" fw={700}>{productName}</Text>
+            <Text fz="20px" fw={700}>
+              {productName}
+            </Text>
+
             <Group position="apart">
-              <Text className={classes.priceTitleText}>Price:</Text>
+              <Text color="#A3A3A3">
+                Price:
+              </Text>
+
               <Text fz="20px" fw={700}>
                 $
                 {productPrice}
               </Text>
             </Group>
           </Stack>
+
           <Button onClick={handleAddToCart}>
             Add to Cart
           </Button>

@@ -6,12 +6,11 @@ import {
   Text,
 } from '@mantine/core';
 import { Link } from 'components';
-import { LogoImage } from 'public/images';
+import { LogoImage } from 'public/icons';
 import { accountApi } from 'resources/account';
 import { useStyles } from './styles';
 import MarketplaceMainTabs from './components/MarketplaceMainTabs';
 
-import ShadowLoginBanner from './components/ShadowLoginBanner';
 import CartAndLogout from './components/CartAndLogout';
 
 const Header: FC = () => {
@@ -29,16 +28,18 @@ const Header: FC = () => {
 
   return (
     <LayoutHeader height="72px">
-      {account.isShadow && <ShadowLoginBanner email={account.email} />}
       <Container
         className={classes.headerContainer}
         fluid
       >
         <Link underline={false} type="router" href={RoutePath.Marketplace}>
           <LogoImage />
+
           <Text className={classes.logoText}>Shopy</Text>
         </Link>
+
         <MarketplaceMainTabs />
+
         <CartAndLogout cartItemCount={count} />
       </Container>
     </LayoutHeader>

@@ -4,11 +4,11 @@ import { IconTrash } from '@tabler/icons-react';
 import { Product } from 'types';
 import { productApi } from 'resources/product';
 import { useLocalStorage } from '@mantine/hooks';
+import { handleError } from 'utils';
+import { accountApi } from 'resources/account';
 import { useStyles } from './styles';
-import { handleError } from '../../../../utils';
-import { accountApi } from '../../../../resources/account';
 
-const Card : FC<Product> = ({ imageUrl, productName, productPrice, _id, soldOut, priceId }) => {
+const Card : FC<Product> = ({ imageUrl, productName, productPrice, _id, soldOut }) => {
   const { classes } = useStyles();
   const { mutate: removeProduct } = productApi.useRemoveProduct(_id);
   const { mutate: removeFromCart } = accountApi.useRemoveProductFromCart();
