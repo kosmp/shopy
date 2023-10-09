@@ -1,51 +1,29 @@
-import { FC, useEffect, useState } from 'react';
-import { Tabs } from '@mantine/core';
+import { FC } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { Group } from '@mantine/core';
 import { useStyles } from './styles';
 
 const MarketplaceMainTabs: FC = () => {
   const { classes } = useStyles();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('');
-
-  useEffect(() => {
-    const currentRoute = router.pathname;
-
-    if (currentRoute.includes('/your-products')) {
-      setActiveTab('your products');
-    } else if (!currentRoute.includes('/cart')) {
-      setActiveTab('marketplace');
-    } else {
-      setActiveTab('');
-    }
-  }, [router.pathname]);
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-
-    const newRoute = value === 'marketplace' ? '/' : '/your-products';
-
-    router.push(newRoute);
-  };
 
   return (
-    <Tabs variant="pills" value={activeTab} onTabChange={handleTabChange}>
-      <Tabs.List className={classes.tabsContainer}>
-        <Tabs.Tab
-          className={classes.tab}
-          value="marketplace"
-        >
-          Marketplace
-        </Tabs.Tab>
+    <Group spacing={32}>
+      <Link
+        className={`${classes.tab} ${router.pathname === '/' ? classes.activeTab : ''}`}
+        href="/"
+      >
+        Marketplace
+      </Link>
 
-        <Tabs.Tab
-          className={classes.tab}
-          value="your products"
-        >
-          Your products
-        </Tabs.Tab>
-      </Tabs.List>
-    </Tabs>
+      <Link
+        className={`${classes.tab} ${router.pathname.includes('/your-products') ? classes.activeTab : ''}`}
+        href="/your-products"
+      >
+        Your products
+      </Link>
+    </Group>
   );
 };
 
