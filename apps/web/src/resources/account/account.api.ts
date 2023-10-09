@@ -36,22 +36,10 @@ export function useSignUp<T>() {
   return useMutation<SignUpResponse, unknown, T>(signUp);
 }
 
-export function useResendEmail<T>() {
-  const resendEmail = (data: T) => apiService.post('/account/resend-email', data);
-
-  return useMutation<{}, unknown, T>(resendEmail);
-}
-
 export function useGet(options? : {}) {
   const get = () => apiService.get('/account');
 
   return useQuery<userTypes.User>(['account'], get, options);
-}
-
-export function useUpdate<T>() {
-  const update = (data: T) => apiService.put('/account', data);
-
-  return useMutation<userTypes.User, unknown, T>(update);
 }
 
 export function useAddProductToCart<T>() {

@@ -11,15 +11,14 @@ import {
   PasswordInput,
   Group,
   Title,
-  Text,
 } from '@mantine/core';
 
-import config from 'config';
 import { RoutePath } from 'routes';
 import { handleError } from 'utils';
 import { Link } from 'components';
 
 import { accountApi, accountConstants } from 'resources/account';
+import router from 'next/router';
 import { Tips } from './components';
 
 const schema = z.object({
@@ -45,10 +44,6 @@ const passwordRules = [
 ];
 
 const SignUp: NextPage = () => {
-  const [email, setEmail] = useState('');
-  const [registered, setRegistered] = useState(false);
-  const [signupToken, setSignupToken] = useState();
-
   const [passwordRulesData, setPasswordRulesData] = useState(passwordRules);
 
   const {
@@ -79,44 +74,9 @@ const SignUp: NextPage = () => {
   const { mutate: signUp, isLoading: isSignUpLoading } = accountApi.useSignUp<SignUpParams>();
 
   const onSubmit = (data: SignUpParams) => signUp(data, {
-    onSuccess: (response: any) => {
-      if (response.signupToken) setSignupToken(response.signupToken);
-      setRegistered(true);
-      setEmail(data.email);
-    },
+    onSuccess: async () => { await router.push('/sign-in'); },
     onError: (e) => handleError(e, setError),
   });
-
-  if (registered) {
-    return (
-      <>
-        <Head>
-          <title>Sign up</title>
-        </Head>
-
-        <Stack sx={{ width: '450px' }}>
-          <Title order={2}>Thanks!</Title>
-
-          <Text size="md" sx={({ colors }) => ({ color: colors.gray[5] })}>
-            Please follow the instructions from the email to complete a sign up process.
-            We sent an email with a confirmation link to
-            {' '}
-            <b>{email}</b>
-          </Text>
-
-          {signupToken && (
-            <div>
-              You look like a cool developer.
-              {' '}
-              <Link size="sm" href={`${config.API_URL}/account/verify-email?token=${signupToken}`}>
-                Verify email
-              </Link>
-            </div>
-          )}
-        </Stack>
-      </>
-    );
-  }
 
   return (
     <>

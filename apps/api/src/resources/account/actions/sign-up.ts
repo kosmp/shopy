@@ -3,11 +3,10 @@ import { z } from 'zod';
 import config from 'config';
 import { securityUtil } from 'utils';
 import { validateMiddleware } from 'middlewares';
-import { AppKoaContext, Next, AppRouter, Template } from 'types';
+import { AppKoaContext, Next, AppRouter } from 'types';
 import { userService, User } from 'resources/user';
 import { stripeService } from 'services';
 
-import emailService from 'services/email/email.service';
 import { emailRegex, passwordRegex } from 'resources/account/account.constants';
 
 const schema = z.object({
@@ -45,22 +44,12 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const user = await userService.insertOne({
     email,
     passwordHash: hash.toString(),
-    isEmailVerified: false,
     signupToken,
     productsInCart: [],
     purchasedProducts: [],
   });
 
   await stripeService.createAndAttachStripeAccount(user);
-
-  await emailService.sendTemplate<Template.VERIFY_EMAIL>({
-    to: user.email,
-    subject: 'Please Confirm Your Email Address for Ship',
-    template: Template.VERIFY_EMAIL,
-    params: {
-      href: `${config.API_URL}/account/verify-email?token=${signupToken}`,
-    },
-  });
 
   ctx.body = config.IS_DEV ? { signupToken } : {};
 }

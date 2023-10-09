@@ -15,7 +15,6 @@ export interface User {
   deletedOn?: Date | null;
   email: string;
   passwordHash: string;
-  isEmailVerified: boolean;
   signupToken: string | null;
   productsInCart: Array<string>;
   purchasedProducts: Array<PurchaseInfo>;

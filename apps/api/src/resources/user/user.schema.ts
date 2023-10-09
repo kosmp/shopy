@@ -7,7 +7,6 @@ const schema = z.object({
   passwordHash: z.string().nullable().optional(),
   stripeId: z.string().optional().nullable(),
   signupToken: z.string().nullable().optional(),
-  isEmailVerified: z.boolean().default(false),
   productsInCart: z.array(z.string()),
   purchasedProducts: z.array(z.object({
     productId: z.string(),
