@@ -64,10 +64,10 @@ const Filters: FC<FilterProps> = ({
   };
 
   return (
-    <Paper p="20px">
-      <Stack spacing="32px">
+    <Paper p={20}>
+      <Stack spacing={32}>
         <Group position="apart">
-          <Text fz="20px" fw={700}>
+          <Text fz={20} fw={700}>
             Filters
           </Text>
 
@@ -78,12 +78,12 @@ const Filters: FC<FilterProps> = ({
           >
             Reset All&nbsp;
 
-            <IconX size="10px" />
+            <IconX size={10} />
           </UnstyledButton>
         </Group>
 
         <Stack>
-          <Text fz="16px" fw="700">
+          <Text fz={16} fw={700}>
             Price
           </Text>
 

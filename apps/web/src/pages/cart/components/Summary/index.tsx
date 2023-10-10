@@ -38,7 +38,7 @@ const Summary: FC<SummaryProps> = ({ totalPrice, checkoutData }) => {
 
   return (
     <Paper className={classes.summaryCard}>
-      <Stack spacing="32px">
+      <Stack spacing={32}>
         <Text className={classes.summaryTitleText}>
           Summary
         </Text>

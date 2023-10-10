@@ -131,12 +131,12 @@ const Marketplace: NextPage = () => {
                   Results
                 </Text>
 
-                <Group spacing="6px">
+                <Group spacing={6}>
                   <UnstyledButton
                     className={classes.switchButton}
                     onClick={() => handleSort(sortBy === 'Sort by newest' ? 'Sort by oldest' : 'Sort by newest')}
                   >
-                    <IconArrowsDownUp size="16px" color="gray" />
+                    <IconArrowsDownUp size={16} color="gray" />
                   </UnstyledButton>
 
                   <Select

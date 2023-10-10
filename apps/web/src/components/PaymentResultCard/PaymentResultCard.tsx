@@ -13,12 +13,12 @@ const PaymentResultCard : FC<PaymentResultCardProps> = ({ paymentStatusText, des
   const { classes } = useStyles();
 
   return (
-    <Paper p="20px" className={classes.card}>
-      <Stack spacing="32px" align="center">
+    <Paper p={20} className={classes.card}>
+      <Stack spacing={32} align="center">
         <Image maw={56} src={imagePath} />
 
-        <Stack spacing="16px" align="center">
-          <Text fw={600} fz="24px">
+        <Stack spacing={16} align="center">
+          <Text fw={600} fz={24}>
             {paymentStatusText}
           </Text>
 

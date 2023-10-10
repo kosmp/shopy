@@ -10,11 +10,11 @@ const EmptyStateCard: FC = () => {
     <Stack spacing={20} align="center" className={classes.stack}>
       <Image maw={206} src="images/balloon_empty_state.png" />
       <Stack spacing={20} align="center">
-        <Text fw={600} fz="20px">
+        <Text fw={600} fz={20}>
           Oops, there&apos;s nothing here yet!
         </Text>
 
-        <Text fz="14px" color="#767676" align="center">
+        <Text fz={14} color="#767676" align="center">
           You haven&apos;t made any purchases yet.
           Go to the marketplace and make purchases.
         </Text>

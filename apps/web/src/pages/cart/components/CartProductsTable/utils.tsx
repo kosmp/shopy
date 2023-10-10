@@ -18,7 +18,7 @@ export const getHistoryColumns = (styles: Record<string, string>) => {
         )
       ),
       cell: (info) => (
-        <Group spacing="25px" className={styles.firstColumnHistory}>
+        <Group spacing={25} className={styles.firstColumnHistory}>
           <Image
             width="80"
             height="80"

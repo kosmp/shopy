@@ -47,11 +47,11 @@ const Cart: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Marketplace</title>
+        <title>Cart</title>
       </Head>
 
-      <Group spacing="78px" grow={((currentTabValue === 'my cart' && !myCartData.length) || (currentTabValue === 'history' && !resultHistoryData.length))}>
-        <Stack spacing="20px" className={((currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length)) ? classes.mainCartBlockStack : ''}>
+      <Group spacing={78} grow={((currentTabValue === 'my cart' && !myCartData.length) || (currentTabValue === 'history' && !resultHistoryData.length))}>
+        <Stack spacing={20} className={((currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length)) ? classes.mainCartBlockStack : ''}>
           <Tabs defaultValue="my cart" variant="pills" activateTabWithKeyboard onTabChange={(value: string) => setCurrentTabValue(value)}>
             <Tabs.List>
               <Tabs.Tab value="my cart" className={`${classes.tab} ${classes.leftTabMargin}`}>

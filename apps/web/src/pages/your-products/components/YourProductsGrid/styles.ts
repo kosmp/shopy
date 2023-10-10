@@ -2,8 +2,8 @@ import { createStyles } from '@mantine/core';
 
 export const useStyles = createStyles(() => ({
   emptyArrayNewCard: {
-    paddingTop: '81.98px',
-    paddingBottom: '81.98px',
+    paddingTop: '82px',
+    paddingBottom: '82px',
     textDecoration: 'none',
   },
   notEmptyArrayNewCard: {

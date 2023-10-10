@@ -27,8 +27,8 @@ const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice }) => {
         <Image src={imageUrl} height={218} fit="cover" />
 
         <Stack className={classes.namePriceButtonStack}>
-          <Stack spacing="13.51px">
-            <Text fz="20px" fw={700}>
+          <Stack spacing={14}>
+            <Text fz={20} fw={700}>
               {productName}
             </Text>
 
@@ -37,7 +37,7 @@ const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice }) => {
                 Price:
               </Text>
 
-              <Text fz="20px" fw={700}>
+              <Text fz={20} fw={700}>
                 $
                 {productPrice}
               </Text>

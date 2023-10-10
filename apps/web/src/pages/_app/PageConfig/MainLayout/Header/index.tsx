@@ -27,7 +27,7 @@ const Header: FC = () => {
   if (!account) return null;
 
   return (
-    <LayoutHeader height="72px">
+    <LayoutHeader height={72}>
       <Container
         className={classes.headerContainer}
         fluid

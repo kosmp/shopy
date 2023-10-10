@@ -19,8 +19,8 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
       <Grid.Col span={1}>
         <Link href={RoutePath.CreateProduct} className={classes.emptyArrayNewCard}>
           <Paper className={products.length === 0 ? classes.emptyArrayNewCard : classes.notEmptyArrayNewCard}>
-            <Stack spacing="12px" align="center">
-              <ThemeIcon radius="xl" size="40px">
+            <Stack spacing={12} align="center">
+              <ThemeIcon radius="xl" size={40}>
                 <IconPlus />
               </ThemeIcon>
 

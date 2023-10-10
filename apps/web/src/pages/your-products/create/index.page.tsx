@@ -115,8 +115,8 @@ const Create: NextPage = () => {
 
   return (
     <Box className={classes.externalBox}>
-      <Stack spacing="20px">
-        <Text size="20px" className={classes.text}>
+      <Stack spacing={20}>
+        <Text size={20} className={classes.text}>
           Create New Product
         </Text>
 
