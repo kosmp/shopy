@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Group, Indicator, Text } from '@mantine/core';
-import { Cart, Logout } from 'public/icons';
+import { BlueCart, Cart, Logout } from 'public/icons';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { RoutePath } from 'routes';
 import { accountApi } from 'resources/account';
 import { useStyles } from './styles';
@@ -12,12 +13,14 @@ interface CartAndLogoutProps {
 
 const CartAndLogout: FC<CartAndLogoutProps> = ({ cartItemCount }) => {
   const { classes } = useStyles();
+  const router = useRouter();
+  const isCartPage = router.pathname === RoutePath.Cart;
   const { mutate: signOut } = accountApi.useSignOut();
 
   return (
     <Group className={classes.cardAndLogoutGroup}>
       <Link href={RoutePath.Cart}>
-        <Cart />
+        {isCartPage ? <BlueCart /> : <Cart />}
 
         <Indicator
           className={classes.cartIndicator}
