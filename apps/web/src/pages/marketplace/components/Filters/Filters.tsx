@@ -1,9 +1,19 @@
-import { Flex, Group, NumberInput, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Group, NumberInput, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { Dispatch, FC, FormEvent, SetStateAction, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 import { FilterProps } from '../../types';
 import { useStyles } from './styles';
+
+const schema = z.object({
+  priceValueFrom: z.union([z.number().min(0).max(99999999), z.literal('')]),
+  priceValueTo: z.union([z.number().min(0).max(99999999), z.literal('')]),
+});
+
+export type FilterValuesFormFarams = z.infer<typeof schema>;
 
 const Filters: FC<FilterProps> = ({
   inputValueFrom,
@@ -11,47 +21,37 @@ const Filters: FC<FilterProps> = ({
   handleInputChangeFrom,
   handleInputChangeTo,
 }) => {
+  const methods = useForm<FilterValuesFormFarams>({
+    resolver: zodResolver(schema),
+    defaultValues: { priceValueFrom: inputValueFrom, priceValueTo: inputValueTo },
+    mode: 'onChange',
+  });
   const { classes } = useStyles();
-  const [priceValueFrom, setPriceValueFrom] = useState<number | ''>('');
-  const [debouncedFrom] = useDebouncedValue<number | ''>(priceValueFrom, 1500);
-  const [priceValueTo, setPriceValueTo] = useState<number | ''>('');
-  const [debouncedTo] = useDebouncedValue<number | ''>(priceValueTo, 1500);
+  const [debouncedFrom] = useDebouncedValue<number | ''>(methods.getValues('priceValueFrom'), 1500);
+  const [debouncedTo] = useDebouncedValue<number | ''>(methods.getValues('priceValueTo'), 1500);
 
   useEffect(() => {
     handleInputChangeFrom(debouncedFrom);
     handleInputChangeTo(debouncedTo);
-  }, [debouncedFrom, debouncedTo, handleInputChangeFrom, handleInputChangeTo]);
+  }, [debouncedFrom, debouncedTo]);
 
   useEffect(() => {
-    setPriceValueFrom(inputValueFrom);
+    methods.setValue('priceValueFrom', inputValueFrom);
+    if (inputValueFrom === '' && methods.formState.errors.priceValueFrom) {
+      methods.clearErrors('priceValueFrom');
+    }
   }, [inputValueFrom]);
 
   useEffect(() => {
-    setPriceValueTo(inputValueTo);
+    methods.setValue('priceValueTo', inputValueTo);
+    if (inputValueTo === '' && methods.formState.errors.priceValueTo) {
+      methods.clearErrors('priceValueTo');
+    }
   }, [inputValueTo]);
 
   const resetFilters = () => {
-    setPriceValueFrom('');
-    setPriceValueTo('');
     handleInputChangeFrom('');
     handleInputChangeTo('');
-  };
-
-  const handleInput = (e: FormEvent<HTMLInputElement>, handler: Dispatch<SetStateAction<number | ''>>) => {
-    const inputElement = e.target as HTMLInputElement;
-    const inputValue = inputElement.value;
-
-    const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-    inputElement.value = numericValue;
-
-    if (numericValue !== '' && numericValue.length <= 8) {
-      handler(Number(numericValue));
-    } else if (numericValue !== '' && numericValue.length > 8) {
-      handler(0);
-    } else {
-      handler('');
-    }
   };
 
   return (
@@ -78,24 +78,38 @@ const Filters: FC<FilterProps> = ({
             Price
           </Text>
 
-          <Flex className={classes.filterCellsContainer}>
-            <NumberInput
-              className={classes.leftFilterCell}
-              hideControls
-              placeholder="From:"
-              radius={8}
-              value={priceValueFrom}
-              onInput={(e) => handleInput(e, setPriceValueFrom)}
+          <Group spacing={12} position="apart" align="flex-start" noWrap>
+            <Controller
+              name="priceValueFrom"
+              control={methods.control}
+              render={({ field }) => (
+                <NumberInput
+                  className={classes.leftFilterCell}
+                  hideControls
+                  placeholder="From:"
+                  radius={8}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={methods.formState.errors.priceValueFrom?.message}
+                />
+              )}
             />
 
-            <NumberInput
-              hideControls
-              placeholder="To:"
-              radius={8}
-              value={priceValueTo}
-              onInput={(e) => handleInput(e, setPriceValueTo)}
+            <Controller
+              name="priceValueTo"
+              control={methods.control}
+              render={({ field }) => (
+                <NumberInput
+                  hideControls
+                  placeholder="To:"
+                  radius={8}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={methods.formState.errors.priceValueTo?.message}
+                />
+              )}
             />
-          </Flex>
+          </Group>
         </Stack>
       </Stack>
     </Paper>

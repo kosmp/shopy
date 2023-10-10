@@ -1,10 +1,6 @@
 import { createStyles } from '@mantine/core';
 
 export const useStyles = createStyles(() => ({
-  filterCellsContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   leftFilterCell: {
     marginRight: '12px',
   },
