@@ -27,13 +27,20 @@ const Filters: FC<FilterProps> = ({
     mode: 'onChange',
   });
   const { classes } = useStyles();
-  const [debouncedFrom] = useDebouncedValue<number | ''>(methods.getValues('priceValueFrom'), 1500);
-  const [debouncedTo] = useDebouncedValue<number | ''>(methods.getValues('priceValueTo'), 1500);
+  const [debouncedFrom] = useDebouncedValue<number | ''>(methods.watch('priceValueFrom'), 1000);
+  const [debouncedTo] = useDebouncedValue<number | ''>(methods.watch('priceValueTo'), 1000);
 
   useEffect(() => {
-    handleInputChangeFrom(debouncedFrom);
-    handleInputChangeTo(debouncedTo);
-  }, [debouncedFrom, debouncedTo]);
+    if (!methods.formState.errors.priceValueFrom) {
+      handleInputChangeFrom(debouncedFrom);
+    }
+  }, [debouncedFrom]);
+
+  useEffect(() => {
+    if (!methods.formState.errors.priceValueTo) {
+      handleInputChangeTo(debouncedTo);
+    }
+  }, [debouncedTo]);
 
   useEffect(() => {
     methods.setValue('priceValueFrom', inputValueFrom);
@@ -52,6 +59,8 @@ const Filters: FC<FilterProps> = ({
   const resetFilters = () => {
     handleInputChangeFrom('');
     handleInputChangeTo('');
+    methods.setValue('priceValueFrom', '');
+    methods.setValue('priceValueTo', '');
   };
 
   return (
