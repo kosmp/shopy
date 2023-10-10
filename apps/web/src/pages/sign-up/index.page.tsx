@@ -18,7 +18,6 @@ import { handleError } from 'utils';
 import { Link } from 'components';
 
 import { accountApi, accountConstants } from 'resources/account';
-import router from 'next/router';
 import { Tips } from './components';
 
 const schema = z.object({
@@ -56,6 +55,8 @@ const SignUp: NextPage = () => {
     resolver: zodResolver(schema),
   });
 
+  const { mutate: signIn, isLoading: isSignInLoading } = accountApi.useSignIn<SignUpParams>();
+
   const passwordValue = watch('password', '');
 
   useEffect(() => {
@@ -74,7 +75,9 @@ const SignUp: NextPage = () => {
   const { mutate: signUp, isLoading: isSignUpLoading } = accountApi.useSignUp<SignUpParams>();
 
   const onSubmit = (data: SignUpParams) => signUp(data, {
-    onSuccess: async () => { await router.push('/sign-in'); },
+    onSuccess: () => signIn(data, {
+      onError: (e) => handleError(e, setError),
+    }),
     onError: (e) => handleError(e, setError),
   });
 
@@ -110,7 +113,7 @@ const SignUp: NextPage = () => {
 
             <Button
               type="submit"
-              loading={isSignUpLoading}
+              loading={isSignUpLoading || isSignInLoading}
               fullWidth
               mt={34}
             >
