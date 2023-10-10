@@ -24,7 +24,7 @@ const Card : FC<Product> = ({ _id, imageUrl, productName, productPrice }) => {
   return (
     <Paper>
       <Stack>
-        <Image src={imageUrl} />
+        <Image src={imageUrl} height={218} fit="cover" />
 
         <Stack className={classes.namePriceButtonStack}>
           <Stack spacing="13.51px">

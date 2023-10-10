@@ -33,7 +33,7 @@ const Card : FC<Product> = ({ imageUrl, productName, productPrice, _id, soldOut 
         <Badge size="lg" className={soldOut ? classes.productSoldBadge : classes.productOnSaleBadge}>
           {soldOut ? 'Sold' : 'On sale'}
         </Badge>
-        <Image src={imageUrl} />
+        <Image src={imageUrl} height={174} />
       </Box>
       <Stack spacing="12px" className={classes.namePriceStack}>
         <Text className={classes.text}>{productName}</Text>
