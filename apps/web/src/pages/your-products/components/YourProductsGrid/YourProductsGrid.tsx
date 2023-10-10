@@ -15,8 +15,8 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
   const { classes } = useStyles();
 
   return (
-    <Grid gutter="lg">
-      <Grid.Col span={2}>
+    <Grid gutter={20} columns={5}>
+      <Grid.Col span={1}>
         <Link href={RoutePath.CreateProduct} className={classes.emptyArrayNewCard}>
           <Paper className={products.length === 0 ? classes.emptyArrayNewCard : classes.notEmptyArrayNewCard}>
             <Stack spacing="12px" align="center">
@@ -33,7 +33,7 @@ const YourProductsGrid : FC<ProductsProps> = ({ products }) => {
       </Grid.Col>
 
       {products.map((product: Product) => (
-        <Grid.Col span={2} key={product._id}>
+        <Grid.Col span={1} key={product._id}>
           <YourProductCard
             _id={product._id}
             priceId={product.priceId}
