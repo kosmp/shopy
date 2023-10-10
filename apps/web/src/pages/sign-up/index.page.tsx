@@ -88,39 +88,38 @@ const SignUp: NextPage = () => {
       </Head>
 
       <Stack sx={{ width: '408px' }} spacing={32}>
-        <Stack spacing={32}>
-          <Title order={2}>Sign Up</Title>
+        <Title order={2}>Sign Up</Title>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={20}>
-              <TextInput
-                {...register('email')}
-                label="Email Address"
-                placeholder="Email Address"
-                error={errors.email?.message}
-                labelProps={{ style: { marginBottom: '8px' } }}
-              />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={20}>
+            <TextInput
+              {...register('email')}
+              label="Email Address"
+              placeholder="Email Address"
+              error={errors.email?.message}
+              labelProps={{ style: { marginBottom: '8px' } }}
+            />
 
-              <PasswordInput
-                {...register('password')}
-                label="Password"
-                placeholder="Enter password"
-                error={errors.password?.message}
-                labelProps={{ style: { marginBottom: '8px' } }}
-              />
-              <Tips passwordRulesData={passwordRulesData} />
-            </Stack>
+            <PasswordInput
+              {...register('password')}
+              label="Password"
+              placeholder="Enter password"
+              error={errors.password?.message}
+              labelProps={{ style: { marginBottom: '8px' } }}
+            />
+            <Tips passwordRulesData={passwordRulesData} />
+          </Stack>
 
-            <Button
-              type="submit"
-              loading={isSignUpLoading || isSignInLoading}
-              fullWidth
-              mt={34}
-            >
-              Sign Up
-            </Button>
-          </form>
-        </Stack>
+          <Button
+            type="submit"
+            loading={isSignUpLoading || isSignInLoading}
+            fullWidth
+            mt={32}
+          >
+            Sign Up
+          </Button>
+        </form>
+
         <Group sx={{ fontSize: '16px', justifyContent: 'center' }} spacing={12}>
           Have an account?
 

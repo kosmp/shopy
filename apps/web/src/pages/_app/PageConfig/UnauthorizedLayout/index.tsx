@@ -3,7 +3,7 @@ import { FC, ReactElement } from 'react';
 import {
   SimpleGrid,
   Image,
-  MediaQuery,
+  MediaQuery, Group,
 } from '@mantine/core';
 
 import { useStyles } from './styles';
@@ -15,12 +15,7 @@ interface UnauthorizedLayoutProps {
 const UnauthorizedLayout: FC<UnauthorizedLayoutProps> = ({ children }) => {
   const { classes } = useStyles();
   return (
-    <SimpleGrid
-      cols={2}
-      breakpoints={[
-        { maxWidth: 'sm', cols: 1, spacing: 'sm' },
-      ]}
-    >
+    <Group spacing={0} noWrap grow>
       <div className={classes.wrapper}>
         <main className={classes.content}>
           {children}
@@ -38,7 +33,7 @@ const UnauthorizedLayout: FC<UnauthorizedLayoutProps> = ({ children }) => {
           fit="scale-down"
         />
       </MediaQuery>
-    </SimpleGrid>
+    </Group>
   );
 };
 

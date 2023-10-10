@@ -37,46 +37,44 @@ const SignIn: NextPage = () => {
       </Head>
 
       <Stack sx={{ width: '408px' }} spacing={32}>
-        <Stack spacing={32}>
-          <Title order={2}>
-            Sign In
-          </Title>
+        <Title order={2}>
+          Sign In
+        </Title>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={20}>
-              <TextInput
-                {...register('email')}
-                label="Email Address"
-                placeholder="Email Address"
-                error={errors.email?.message}
-                labelProps={{ style: { marginBottom: '8px' } }}
-              />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={20}>
+            <TextInput
+              {...register('email')}
+              label="Email Address"
+              placeholder="Email Address"
+              error={errors.email?.message}
+              labelProps={{ style: { marginBottom: '8px' } }}
+            />
 
-              <PasswordInput
-                {...register('password')}
-                label="Password"
-                placeholder="Enter password"
-                error={errors.password?.message}
-                labelProps={{ style: { marginBottom: '8px' } }}
-              />
+            <PasswordInput
+              {...register('password')}
+              label="Password"
+              placeholder="Enter password"
+              error={errors.password?.message}
+              labelProps={{ style: { marginBottom: '8px' } }}
+            />
 
-              {errors!.credentials && (
-                <Alert icon={<IconAlertCircle size={16} />} color="red">
-                  {errors.credentials.message}
-                </Alert>
-              )}
-            </Stack>
+            {errors!.credentials && (
+            <Alert icon={<IconAlertCircle size={16} />} color="red">
+              {errors.credentials.message}
+            </Alert>
+            )}
+          </Stack>
 
-            <Button
-              loading={isSignInLoading}
-              type="submit"
-              fullWidth
-              mt={34}
-            >
-              Sign in
-            </Button>
-          </form>
-        </Stack>
+          <Button
+            loading={isSignInLoading}
+            type="submit"
+            fullWidth
+            mt={32}
+          >
+            Sign in
+          </Button>
+        </form>
 
         <Group sx={{ fontSize: '16px', justifyContent: 'center' }} spacing={12}>
           Don’t have an account?
