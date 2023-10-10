@@ -18,7 +18,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => (
         backgroundColor: '#FCFCFC',
       },
       main: {
-        padding: '32px',
+        padding: '48px',
         paddingTop: '104px',
       },
     })}

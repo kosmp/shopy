@@ -11,7 +11,7 @@ export const useStyles = createStyles(() => ({
   },
   headerContainer: {
     minHeight: '104px',
-    padding: '0 32px',
+    padding: '0 48px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
