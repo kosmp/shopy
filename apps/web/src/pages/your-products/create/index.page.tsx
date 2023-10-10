@@ -1,3 +1,6 @@
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import {
@@ -19,19 +22,27 @@ import { useStyles } from './styles';
 
 const ONE_MB_MIN_BYTES = 1048576;
 
+const schema = z.object({
+  productTitle: z.string().min(1, 'Product name must be from 1 to 30 symbols').max(30).nullable(),
+  productPrice: z.number().min(1, { message: 'Product price must be a number from 1 to 99999999' }).max(99999999, { message: 'Product price must be a number from 1 to 99999999' }).nullable(),
+  productCount: z.number().min(1, { message: 'Product count must be a number from 1 to 99999999' }).max(99999999, { message: 'Product count must be a number from 1 to 99999999' }).nullable(),
+});
+
+export type CreateProductParams = z.infer<typeof schema>;
+
 const Create: NextPage = () => {
   const { classes } = useStyles();
   const [imageUrl, setImageUrl] = useState<string | null>('../images/imagePlaceholder.png');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState('1');
-  const [count, setCount] = useState('1');
   const { mutate: uploadProduct } = productApi.useUploadProduct<FormData>();
-  const [titleError, setTitleError] = useState<string>('');
-  const [priceError, setPriceError] = useState<string>('');
   const [imageError, setImageError] = useState<string | null>(null);
-  const [countError, setCountError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const methods = useForm<CreateProductParams>({
+    resolver: zodResolver(schema),
+    defaultValues: { productTitle: null, productPrice: undefined, productCount: undefined },
+    mode: 'onChange',
+  });
 
   const handleFileChange = (selectedFile: File | null) => {
     setImageError(null);
@@ -74,20 +85,6 @@ const Create: NextPage = () => {
   const handleUploadProduct = () => {
     setImageError(null);
 
-    if (!title) {
-      setTitleError('Please fill in the correct product title');
-    }
-
-    if (!price) {
-      setPriceError('Please fill in the correct product price');
-    }
-
-    if (!count) {
-      setImageError('Please fill in available count');
-
-      return;
-    }
-
     if (!imageFile) {
       setImageError('Please import product photo');
 
@@ -95,21 +92,24 @@ const Create: NextPage = () => {
     }
 
     setLoading(true);
-    if (isFileFormatCorrect(imageFile) && isFileSizeCorrect(imageFile)) {
+    if (isFileFormatCorrect(imageFile) && isFileSizeCorrect(imageFile) && methods && methods.getValues('productPrice') && methods.getValues('productCount')
+      && !methods.getFieldState('productTitle').invalid && !methods.getFieldState('productPrice').invalid && !methods.getFieldState('productCount').invalid) {
       const body = new FormData();
       body.append('file', imageFile, imageFile.name);
-      body.append('productName', title);
-      body.append('productPrice', price);
-      body.append('productCount', count);
+      body.append('productName', methods.getValues('productTitle') as string);
+      body.append('productPrice', methods?.getValues('productPrice')?.toString() as string);
+      body.append('productCount', methods?.getValues('productCount')?.toString() as string);
       body.append('soldOut', String(false));
 
       uploadProduct(body, {
-        onSuccess: () => {
-          router.push('/your-products');
+        onSuccess: async () => {
+          await router.push('/your-products');
           setLoading(false);
         },
         onError: (err) => handleError(err),
       });
+    } else {
+      setLoading(false);
     }
   };
 
@@ -143,18 +143,8 @@ const Create: NextPage = () => {
             placeholder="Enter title of the product..."
             radius={8}
             className={classes.input}
-            value={title}
-            onChange={(event) => {
-              setTitleError('');
-              const inputValue = event.currentTarget.value;
-
-              if (inputValue.length <= 30) {
-                setTitle(inputValue);
-              } else {
-                setTitle(inputValue.slice(0, 30));
-              }
-            }}
-            error={titleError}
+            {...methods.register('productTitle')}
+            error={methods.formState.errors.productTitle?.message}
           />
         </Stack>
 
@@ -163,28 +153,20 @@ const Create: NextPage = () => {
             Price
           </Text>
 
-          <NumberInput
-            hideControls
-            placeholder="Enter price of the product"
-            radius={8}
-            className={classes.input}
-            value={Number(price) ?? 1}
-            onInput={(e) => {
-              setPriceError('');
-              const inputElement = e.target as HTMLInputElement;
-              const inputValue = inputElement.value;
-
-              const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-              if (Number(numericValue) > 99999999) {
-                inputElement.value = '99999999';
-                setPrice('99999999');
-              } else {
-                inputElement.value = numericValue;
-                setPrice(numericValue === '' ? '1' : numericValue);
-              }
-            }}
-            error={priceError}
+          <Controller
+            name="productPrice"
+            control={methods.control}
+            render={({ field }) => (
+              <NumberInput
+                hideControls
+                placeholder="Enter price of the product"
+                radius={8}
+                className={classes.input}
+                value={field.value ?? ''}
+                onChange={field.onChange}
+                error={methods.formState.errors.productPrice?.message}
+              />
+            )}
           />
         </Stack>
 
@@ -193,28 +175,20 @@ const Create: NextPage = () => {
             Count of products
           </Text>
 
-          <NumberInput
-            hideControls
-            placeholder="Enter available count of products"
-            radius={8}
-            className={classes.input}
-            value={Number(count) ?? 1}
-            onInput={(e) => {
-              setCountError('');
-              const inputElement = e.target as HTMLInputElement;
-              const inputValue = inputElement.value;
-
-              const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-              if (Number(numericValue) > 99999999) {
-                inputElement.value = '99999999';
-                setCount('99999999');
-              } else {
-                inputElement.value = numericValue;
-                setCount(numericValue === '' ? '1' : numericValue);
-              }
-            }}
-            error={countError}
+          <Controller
+            name="productCount"
+            control={methods.control}
+            render={({ field }) => (
+              <NumberInput
+                hideControls
+                placeholder="Enter available count of products"
+                radius={8}
+                className={classes.input}
+                value={field.value ?? ''}
+                onChange={field.onChange}
+                error={methods.formState.errors.productCount?.message}
+              />
+            )}
           />
         </Stack>
       </Stack>
