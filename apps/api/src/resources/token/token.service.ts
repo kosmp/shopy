@@ -9,22 +9,20 @@ const service = db.createService<Token>(DATABASE_DOCUMENTS.TOKENS, {
   schemaValidator: (obj) => schema.parseAsync(obj),
 });
 
-const createToken = async (userId: string, type: TokenType, isShadow?: boolean) => {
+const createToken = async (userId: string, type: TokenType) => {
   const value = await securityUtil.generateSecureToken(TOKEN_SECURITY_LENGTH);
 
   return service.insertOne({
     type,
     value,
     userId,
-    isShadow: isShadow || null,
   });
 };
 
 const createAuthTokens = async ({
   userId,
-  isShadow,
-}: { userId: string, isShadow?: boolean }) => {
-  const accessTokenEntity = await createToken(userId, TokenType.ACCESS, isShadow);
+}: { userId: string }) => {
+  const accessTokenEntity = await createToken(userId, TokenType.ACCESS);
 
   return {
     accessToken: accessTokenEntity.value,
@@ -36,7 +34,6 @@ const findTokenByValue = async (token: string) => {
 
   return tokenEntity && {
     userId: tokenEntity.userId,
-    isShadow: tokenEntity.isShadow,
   };
 };
 

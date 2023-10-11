@@ -4,7 +4,7 @@ import config from 'config';
 
 const socket = io(config.WS_URL, {
   transports: ['websocket'],
-  autoConnect: false,
+  autoConnect: true,
 });
 
 export const connect = async () => {
