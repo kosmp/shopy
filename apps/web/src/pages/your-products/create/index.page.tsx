@@ -2,7 +2,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { NextPage } from 'next';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import {
 import { productApi } from 'resources/product';
 import { handleError } from 'utils';
 import router from 'next/router';
+import Head from 'next/head';
 import { useStyles } from './styles';
 
 const ONE_MB_MIN_BYTES = 1048576;
@@ -114,91 +115,97 @@ const Create: NextPage = () => {
   };
 
   return (
-    <Box className={classes.externalBox}>
-      <Stack spacing={20}>
-        <Text size={20} className={classes.text}>
-          Create New Product
-        </Text>
+    <>
+      <Head>
+        <title>Create</title>
+      </Head>
 
-        <Group spacing="16px">
-          <Image src={imageUrl} alt="Uploaded image" width="180px" radius={20} fit="contain" />
-
-          <FileButton onChange={handleFileChange} accept="image/png,image/jpeg,image/jpg">
-            {(props) => <UnstyledButton {...props} className={classes.uploadButton}>Upload Photo</UnstyledButton>}
-          </FileButton>
-        </Group>
-
-        {imageError && (
-        <Text color="red" size="16px">
-          {imageError}
-        </Text>
-        )}
-
-        <Stack spacing="8px">
-          <Text size="16px" className={classes.text}>
-            Title of the product
+      <Box className={classes.externalBox}>
+        <Stack spacing={20}>
+          <Text size={20} className={classes.text}>
+            Create New Product
           </Text>
 
-          <TextInput
-            placeholder="Enter title of the product..."
-            radius={8}
-            className={classes.input}
-            {...methods.register('productTitle')}
-            error={methods.formState.errors.productTitle?.message}
-          />
+          <Group spacing="16px">
+            <Image src={imageUrl} alt="Uploaded image" width="180px" radius={20} fit="contain" />
+
+            <FileButton onChange={handleFileChange} accept="image/png,image/jpeg,image/jpg">
+              {(props) => <UnstyledButton {...props} className={classes.uploadButton}>Upload Photo</UnstyledButton>}
+            </FileButton>
+          </Group>
+
+          {imageError && (
+            <Text color="red" size="16px">
+              {imageError}
+            </Text>
+          )}
+
+          <Stack spacing="8px">
+            <Text size="16px" className={classes.text}>
+              Title of the product
+            </Text>
+
+            <TextInput
+              placeholder="Enter title of the product..."
+              radius={8}
+              className={classes.input}
+              {...methods.register('productTitle')}
+              error={methods.formState.errors.productTitle?.message}
+            />
+          </Stack>
+
+          <Stack spacing="8px">
+            <Text size="16px" className={classes.text}>
+              Price
+            </Text>
+
+            <Controller
+              name="productPrice"
+              control={methods.control}
+              render={({ field }) => (
+                <NumberInput
+                  hideControls
+                  placeholder="Enter price of the product"
+                  radius={8}
+                  className={classes.input}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  error={methods.formState.errors.productPrice?.message}
+                />
+              )}
+            />
+          </Stack>
+
+          <Stack spacing="8px">
+            <Text size="16px" className={classes.text}>
+              Count of products
+            </Text>
+
+            <Controller
+              name="productCount"
+              control={methods.control}
+              render={({ field }) => (
+                <NumberInput
+                  hideControls
+                  placeholder="Enter available count of products"
+                  radius={8}
+                  className={classes.input}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  error={methods.formState.errors.productCount?.message}
+                />
+              )}
+            />
+          </Stack>
         </Stack>
 
-        <Stack spacing="8px">
-          <Text size="16px" className={classes.text}>
-            Price
-          </Text>
-
-          <Controller
-            name="productPrice"
-            control={methods.control}
-            render={({ field }) => (
-              <NumberInput
-                hideControls
-                placeholder="Enter price of the product"
-                radius={8}
-                className={classes.input}
-                value={field.value ?? ''}
-                onChange={field.onChange}
-                error={methods.formState.errors.productPrice?.message}
-              />
-            )}
-          />
-        </Stack>
-
-        <Stack spacing="8px">
-          <Text size="16px" className={classes.text}>
-            Count of products
-          </Text>
-
-          <Controller
-            name="productCount"
-            control={methods.control}
-            render={({ field }) => (
-              <NumberInput
-                hideControls
-                placeholder="Enter available count of products"
-                radius={8}
-                className={classes.input}
-                value={field.value ?? ''}
-                onChange={field.onChange}
-                error={methods.formState.errors.productCount?.message}
-              />
-            )}
-          />
-        </Stack>
-      </Stack>
-
-      <Box className={classes.buttonBox}>
-        <Button className={classes.uploadProductButton} onClick={handleUploadProduct} loading={loading}>
-          Upload Product
-        </Button>
+        <Box className={classes.buttonBox}>
+          <Button className={classes.uploadProductButton} onClick={handleUploadProduct} loading={loading}>
+            Upload Product
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

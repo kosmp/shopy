@@ -13,7 +13,9 @@ interface QuantityCellProps {
 
 const QuantityCell: FC<QuantityCellProps> = ({ maxValue, priceId, productPrice, checkOutData, setCheckoutData }) => {
   const { classes } = useStyles();
-  const [value, setValue] = useState<number>(checkOutData?.find((cartProduct: any) => cartProduct.priceId === priceId)?.pickedQuantity ?? 1);
+  const [value, setValue] = useState<number>(
+    checkOutData?.find((cartProduct: any) => cartProduct.priceId === priceId)?.pickedQuantity ?? 1,
+  );
 
   useEffect(() => {
     if (value === 1) {

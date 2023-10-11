@@ -125,7 +125,7 @@ const Marketplace: NextPage = () => {
 
             <Stack>
               <Flex className={classes.activeFiltersAndResults}>
-                <Text>
+                <Text fz={16} fw={700}>
                   {data?.count ?? 0}
                   {' '}
                   Results

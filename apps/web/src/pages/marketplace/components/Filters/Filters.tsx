@@ -34,27 +34,27 @@ const Filters: FC<FilterProps> = ({
     if (!methods.formState.errors.priceValueFrom) {
       handleInputChangeFrom(debouncedFrom);
     }
-  }, [debouncedFrom]);
+  }, [debouncedFrom, handleInputChangeFrom, methods.formState.errors.priceValueFrom]);
 
   useEffect(() => {
     if (!methods.formState.errors.priceValueTo) {
       handleInputChangeTo(debouncedTo);
     }
-  }, [debouncedTo]);
+  }, [debouncedTo, handleInputChangeTo, methods.formState.errors.priceValueTo]);
 
   useEffect(() => {
     methods.setValue('priceValueFrom', inputValueFrom);
     if (inputValueFrom === '' && methods.formState.errors.priceValueFrom) {
       methods.clearErrors('priceValueFrom');
     }
-  }, [inputValueFrom]);
+  }, [inputValueFrom, methods]);
 
   useEffect(() => {
     methods.setValue('priceValueTo', inputValueTo);
     if (inputValueTo === '' && methods.formState.errors.priceValueTo) {
       methods.clearErrors('priceValueTo');
     }
-  }, [inputValueTo]);
+  }, [inputValueTo, methods]);
 
   const resetFilters = () => {
     handleInputChangeFrom('');
