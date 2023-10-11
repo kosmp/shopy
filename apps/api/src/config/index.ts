@@ -17,12 +17,11 @@ const schema = z.object({
   WEB_URL: z.string(),
   SENDGRID_API_KEY: z.string().optional(),
   ADMIN_KEY: z.string().optional(),
-  CLOUD_STORAGE_ENDPOINT: z.string().optional(),
-  CLOUD_STORAGE_BUCKET: z.string().optional(),
-  CLOUD_STORAGE_ACCESS_KEY_ID: z.string().optional(),
-  CLOUD_STORAGE_SECRET_ACCESS_KEY: z.string().optional(),
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  CLOUD_STORAGE_NAME: z.string().optional(),
+  CLOUD_STORAGE_API_KEY: z.string().optional(),
+  CLOUD_STORAGE_API_SECRET: z.string().optional(),
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_ENDPOINT_SECRET: z.string(),
 });
 
 type Config = z.infer<typeof schema>;

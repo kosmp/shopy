@@ -3,18 +3,19 @@ import { z } from 'zod';
 const schema = z.object({
   _id: z.string(),
 
-  firstName: z.string(),
-  lastName: z.string(),
-  fullName: z.string(),
   email: z.string(),
   passwordHash: z.string().nullable().optional(),
+  stripeId: z.string().optional().nullable(),
   signupToken: z.string().nullable().optional(),
-  resetPasswordToken: z.string().nullable().optional(),
-  isEmailVerified: z.boolean().default(false),
-  avatarUrl: z.string().nullable().optional(),
-  oauth: z.object({
-    google: z.boolean().default(false),
-  }).optional(),
+  productsInCart: z.array(z.string()),
+  purchasedProducts: z.array(z.object({
+    productId: z.string(),
+    purchaseDate: z.date(),
+    productName: z.string(),
+    productPrice: z.number(),
+    priceId: z.string(),
+    imageUrl: z.string(),
+  }).optional()),
 
   createdOn: z.date().optional(),
   updatedOn: z.date().optional(),

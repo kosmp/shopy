@@ -13,7 +13,7 @@ import {
 
 const NotFound: NextPage = () => {
   const handleClick = useCallback(() => {
-    router.push(RoutePath.Home);
+    router.push(RoutePath.Marketplace);
   }, []);
 
   return (
@@ -21,6 +21,7 @@ const NotFound: NextPage = () => {
       <Head>
         <title>Page not found</title>
       </Head>
+
       <Stack sx={{
         width: '328px',
         height: '100vh',
@@ -29,7 +30,10 @@ const NotFound: NextPage = () => {
         justifyContent: 'center',
       }}
       >
-        <Title order={2}>Oops! The page is not found.</Title>
+        <Title order={2}>
+          Oops! The page is not found.
+        </Title>
+
         <Text
           component="p"
           sx={(theme) => ({
@@ -40,6 +44,7 @@ const NotFound: NextPage = () => {
           The page you are looking for may have been removed,
           or the link you followed may be broken.
         </Text>
+
         <Button
           type="submit"
           onClick={handleClick}

@@ -99,6 +99,15 @@ class ApiClient {
     });
   }
 
+  patch(url: string, data: any = {}, requestConfig: AxiosRequestConfig<any> = {}): Promise<any> {
+    return this._api({
+      method: 'patch',
+      url,
+      data,
+      ...requestConfig,
+    });
+  }
+
   delete(url: string, data: any = {}, requestConfig: AxiosRequestConfig<any> = {}): Promise<any> {
     return this._api({
       method: 'delete',

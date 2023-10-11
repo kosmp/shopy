@@ -1,42 +1,46 @@
-import { memo, FC } from 'react';
+import { memo, FC, useState, useEffect } from 'react';
 import { RoutePath } from 'routes';
 import {
   Header as LayoutHeader,
   Container,
+  Text,
 } from '@mantine/core';
 import { Link } from 'components';
-import { LogoImage } from 'public/images';
-
+import { LogoImage } from 'public/icons';
 import { accountApi } from 'resources/account';
+import { useStyles } from './styles';
+import MarketplaceMainTabs from './components/MarketplaceMainTabs';
 
-import UserMenu from './components/UserMenu';
-import ShadowLoginBanner from './components/ShadowLoginBanner';
+import CartAndLogout from './components/CartAndLogout';
 
 const Header: FC = () => {
+  const { classes } = useStyles();
   const { data: account } = accountApi.useGet();
+  const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (account?.productsInCart?.length !== undefined) {
+      setCount(account?.productsInCart?.length);
+    }
+  }, [account]);
 
   if (!account) return null;
 
   return (
-    <LayoutHeader height="72px">
-      {account.isShadow && <ShadowLoginBanner email={account.email} />}
+    <LayoutHeader height={72}>
       <Container
-        sx={(theme) => ({
-          minHeight: '72px',
-          padding: '0 32px',
-          display: 'flex',
-          flex: '1 1 auto',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: theme.white,
-          borderBottom: `1px solid ${theme.colors.gray[4]}`,
-        })}
+        className={classes.headerContainer}
         fluid
       >
-        <Link type="router" href={RoutePath.Home}>
+        <Link underline={false} type="router" href={RoutePath.Marketplace}>
           <LogoImage />
+
+          <Text className={classes.logoText}>Shopy</Text>
         </Link>
-        <UserMenu />
+
+        <MarketplaceMainTabs />
+
+        <CartAndLogout cartItemCount={count} />
       </Container>
     </LayoutHeader>
   );

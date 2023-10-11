@@ -18,6 +18,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => (
     <Head>
       <title>Ship</title>
     </Head>
+
     <QueryClientProvider client={queryClient}>
       <MantineProvider
         theme={shipTheme}
@@ -26,12 +27,14 @@ const App: FC<AppProps> = ({ Component, pageProps }) => (
       >
         <ModalsProvider>
           <Global styles={globalStyles} />
+
           <Notifications autoClose={10000} />
 
           <PageConfig>
             <Component {...pageProps} />
           </PageConfig>
         </ModalsProvider>
+
         <ReactQueryDevtools position="bottom-right" />
       </MantineProvider>
     </QueryClientProvider>
