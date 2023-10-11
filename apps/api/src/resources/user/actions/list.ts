@@ -34,8 +34,6 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       $and: [
         {
           $or: [
-            { firstName: { $regex: regExp } },
-            { lastName: { $regex: regExp } },
             { email: { $regex: regExp } },
             { createdOn: {} },
           ],
