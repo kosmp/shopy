@@ -24,7 +24,6 @@ const updateLastRequest = (_id: string) => {
 const privateFields = [
   'passwordHash',
   'signupToken',
-  'resetPasswordToken',
 ];
 
 const getPublic = (user: User | null) => _.omit(user, privateFields);
