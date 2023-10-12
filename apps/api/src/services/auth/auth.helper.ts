@@ -9,7 +9,7 @@ export const setTokenCookies = ({
   ctx,
   accessToken,
 }: { ctx: AppKoaContext, accessToken: string }) => {
-  const parsedUrl = url.parse(config.APP_ENV === 'development' ? config.WEB_URL : config.API_URL);
+  const parsedUrl = url.parse(config.WEB_URL);
   
   if (!parsedUrl.hostname) {
     return;
