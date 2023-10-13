@@ -12,7 +12,9 @@ apiService.on('error', (error: any) => {
 socketService.on('connect', () => {
   const account = queryClient.getQueryData(['account']) as User;
 
-  socketService.emit('subscribe', `user-${account._id}`);
+  if (account) {
+    socketService.emit('subscribe', `user-${account._id}`);
+  }
 });
 
 socketService.on('user:updated', (data: User) => {

@@ -83,9 +83,11 @@ const Cart: NextPage = () => {
               data={currentTabValue === 'my cart' ? myCartData : resultHistoryData}
             />
           ) : (
+            (!isListLoading && (
             <Group grow>
               <EmptyStateCard />
             </Group>
+            ))
           )}
         </Stack>
 
