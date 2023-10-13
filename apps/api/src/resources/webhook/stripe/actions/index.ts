@@ -63,6 +63,10 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
         if (doc.productCount - purchasedCount === 0) {
           cartElementsToDelete.push(doc._id);
 
+          stripe.products.update(doc._id, {
+            active: false,
+          });
+
           return ({
             productCount: 0,
             soldOut: true,
