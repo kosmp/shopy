@@ -80,7 +80,7 @@ const Cart: NextPage = () => {
           {(currentTabValue === 'my cart' && myCartData.length) || (currentTabValue === 'history' && resultHistoryData.length) ? (
             <CartProductsTable
               columns={currentTabValue === 'my cart' ? getMyCartColumns(classes, checkoutData, setCheckoutData) : getHistoryColumns(classes)}
-              data={currentTabValue === 'my cart' ? myCartData : resultHistoryData}
+              data={currentTabValue === 'my cart' ? myCartData : resultHistoryData.slice().sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime())}
             />
           ) : (
             (!isListLoading && (
